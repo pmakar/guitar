@@ -182,8 +182,8 @@
     </div>
     <div class="bpm-row">
       <label for="bpmInput">BPM</label>
-      <input id="bpmInput" type="number" min="30" max="240" value="80" />
-      <input id="bpmSlider" type="range" min="30" max="240" value="80" />
+      <input id="bpmInput" type="number" min="0" max="240" value="80" />
+      <input id="bpmSlider" type="range" min="0" max="240" value="80" />
     </div>
   </header>
 
@@ -435,7 +435,7 @@ sus  Maj7`
     }
 
     function syncBpm(value) {
-      const bpm = Math.max(30, Math.min(240, Number(value) || 80));
+      const bpm = Math.max(0, Math.min(240, Number(value) || 0));
       bpmInput.value = bpm;
       bpmSlider.value = bpm;
       setGlobalBpm(bpm);
@@ -448,7 +448,9 @@ sus  Maj7`
       }
       if (isPlaying) {
         stopMetronome();
-        startMetronome();
+        if (bpm > 0) {
+          startMetronome();
+        }
       }
     }
     bpmInput.addEventListener("input", e => syncBpm(e.target.value));
@@ -484,7 +486,12 @@ sus  Maj7`
       metroToggle.textContent = "Stop";
       let beat = 0;
       clickSound(true);
-      const interval = 60000 / Number(bpmInput.value);
+      const bpmValue = Number(bpmInput.value);
+      if (bpmValue <= 0) {
+        stopMetronome();
+        return;
+      }
+      const interval = 60000 / bpmValue;
       timerId = setInterval(() => {
         beat = (beat + 1) % 4;
         clickSound(beat === 0);
