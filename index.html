@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Guitar Practice App</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Dead Tempo Society</title>
   <style>
     :root {
       --bottom-height: 128px;
@@ -19,6 +19,8 @@
     * { box-sizing: border-box; }
 
     body {
+      touch-action: manipulation;
+      -webkit-text-size-adjust: 100%;
       margin: 0;
       font-family: Impact, Haettenschweiler, "Arial Narrow Bold", "DIN Condensed", "Roboto Condensed", system-ui, sans-serif;
       letter-spacing: 0.35px;
@@ -574,8 +576,8 @@ sus  Maj7`
       const progress = getProgress();
       app.innerHTML = `
         <section class="card">
-          <h1>Guitar Practice</h1>
-          <p class="meta">Select a lesson. The metronome stays fixed at the top.</p>
+          <h1>☠ Dead Tempo Society</h1>
+          <p class="meta">Precision, tension, and beautiful mistakes. Train slow. Play brutal.</p>
         </section>
         <section>
           ${lessons.map((lesson, index) => {
