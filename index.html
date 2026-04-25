@@ -454,8 +454,32 @@ sus  Maj7`
         }
       }
     }
+    bpmInput.addEventListener("focus", () => {
+      if (isPlaying) stopMetronome();
+    });
+
     bpmInput.addEventListener("input", e => syncBpm(e.target.value));
+
+    bpmInput.addEventListener("blur", async () => {
+      if (Number(bpmInput.value) > 0) {
+        await startMetronome();
+      }
+    });
+    bpmSlider.addEventListener("pointerdown", () => {
+      if (isPlaying) stopMetronome();
+    });
+
+    bpmSlider.addEventListener("touchstart", () => {
+      if (isPlaying) stopMetronome();
+    });
+
     bpmSlider.addEventListener("input", e => syncBpm(e.target.value));
+
+    bpmSlider.addEventListener("change", async () => {
+      if (Number(bpmSlider.value) > 0) {
+        await startMetronome();
+      }
+    });
 
     function clickSound(accent = false) {
       if (!audioContext) return;
