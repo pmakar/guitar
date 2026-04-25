@@ -182,8 +182,8 @@
     </div>
     <div class="bpm-row">
       <label for="bpmInput">BPM</label>
-      <input id="bpmInput" type="number" min="0" max="240" value="80" />
-      <input id="bpmSlider" type="range" min="0" max="240" value="80" />
+      <input id="bpmInput" type="number" min="0" max="240" step="5" value="80" />
+      <input id="bpmSlider" type="range" min="0" max="240" step="5" value="80" />
     </div>
   </header>
 
@@ -435,7 +435,8 @@ sus  Maj7`
     }
 
     function syncBpm(value) {
-      const bpm = Math.max(0, Math.min(240, Number(value) || 0));
+      let bpm = Math.max(0, Math.min(240, Number(value) || 0));
+      bpm = Math.round(bpm / 5) * 5;
       bpmInput.value = bpm;
       bpmSlider.value = bpm;
       setGlobalBpm(bpm);
