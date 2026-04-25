@@ -446,8 +446,13 @@ sus  Maj7`
       osc.start();
       osc.stop(audioContext.currentTime + 0.07);
     }
-    function startMetronome() {
-      audioContext = audioContext || new AudioContext();
+    async function startMetronome() {
+      const AudioCtx = window.AudioContext || window.webkitAudioContext;
+      audioContext = audioContext || new AudioCtx();
+
+      if (audioContext.state === "suspended") {
+        await audioContext.resume();
+      }
       isPlaying = true;
       metroToggle.textContent = "Stop";
       let beat = 0;
@@ -464,7 +469,13 @@ sus  Maj7`
       clearInterval(timerId);
       timerId = null;
     }
-    metroToggle.addEventListener("click", () => isPlaying ? stopMetronome() : startMetronome());
+    metroToggle.addEventListener("click", async () => {
+      if (isPlaying) {
+        stopMetronome();
+      } else {
+        await startMetronome();
+      }
+    });
 
     function renderHome() {
       currentLessonIndex = null;
