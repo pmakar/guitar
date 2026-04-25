@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Guitar Practice App</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="metronome-bar">
+    <div class="metro-row">
+      <strong>Metronome</strong>
+      <button id="metroToggle">Start</button>
+    </div>
+
+    <div class="bpm-row">
+      <label for="bpmInput">BPM</label>
+      <input id="bpmInput" type="number" min="30" max="240" value="80" />
+      <input id="bpmSlider" type="range" min="30" max="240" value="80" />
+    </div>
+  </header>
+
+  <main id="app"></main>
+
+  <footer class="bottom-nav">
+    <button id="backBtn">←</button>
+    <button id="homeBtn">Home</button>
+    <button id="nextBtn">Next →</button>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
