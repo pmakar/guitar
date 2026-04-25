@@ -4,7 +4,175 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Guitar Practice App</title>
-  <link rel="stylesheet" href="style.css" />
+  <style>
+    :root {
+      --top-height: 104px;
+      --bottom-height: 72px;
+      --bg: #111;
+      --panel: #1c1c1c;
+      --panel-2: #252525;
+      --text: #f2f2f2;
+      --muted: #aaa;
+      --line: #333;
+      --accent: #f5c542;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    .metronome-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      min-height: var(--top-height);
+      background: #050505;
+      border-bottom: 1px solid var(--line);
+      padding: 14px 16px;
+      z-index: 10;
+    }
+
+    .metro-row, .bpm-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .metro-row {
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+
+    .bpm-row label { color: var(--muted); }
+
+    input[type="number"] {
+      width: 76px;
+      padding: 8px;
+      font-size: 18px;
+      background: var(--panel);
+      color: var(--text);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+    }
+
+    input[type="range"] { width: 100%; }
+
+    button {
+      appearance: none;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: var(--panel-2);
+      color: var(--text);
+      padding: 10px 14px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    button.primary {
+      background: var(--accent);
+      color: #111;
+      border-color: var(--accent);
+      font-weight: 700;
+    }
+
+    main {
+      padding: calc(var(--top-height) + 18px) 16px calc(var(--bottom-height) + 18px);
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    h1, h2, h3 { margin-top: 0; }
+
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 16px;
+      margin-bottom: 14px;
+    }
+
+    .lesson-button {
+      width: 100%;
+      text-align: left;
+      margin-bottom: 10px;
+      padding: 16px;
+    }
+
+    .lesson-id {
+      color: var(--accent);
+      font-weight: 700;
+      margin-right: 8px;
+    }
+
+    .meta {
+      color: var(--muted);
+      font-size: 14px;
+      margin-top: 4px;
+    }
+
+    .tab-box {
+      overflow-x: auto;
+      background: #080808;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 14px;
+    }
+
+    pre {
+      margin: 0;
+      font-family: "SFMono-Regular", Consolas, monospace;
+      font-size: 15px;
+      line-height: 1.55;
+      white-space: pre;
+    }
+
+    .progress-grid {
+      display: grid;
+      gap: 10px;
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 90px;
+      border-radius: 12px;
+      border: 1px solid var(--line);
+      background: #080808;
+      color: var(--text);
+      padding: 12px;
+      font-size: 16px;
+    }
+
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      min-height: var(--bottom-height);
+      background: #050505;
+      border-top: 1px solid var(--line);
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      align-items: center;
+      padding: 10px 16px;
+      z-index: 10;
+    }
+
+    .bottom-nav button { min-width: 90px; }
+
+    @media (min-width: 720px) {
+      main { padding-left: 24px; padding-right: 24px; }
+      .progress-grid { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
 </head>
 <body>
   <header class="metronome-bar">
@@ -12,7 +180,6 @@
       <strong>Metronome</strong>
       <button id="metroToggle">Start</button>
     </div>
-
     <div class="bpm-row">
       <label for="bpmInput">BPM</label>
       <input id="bpmInput" type="number" min="30" max="240" value="80" />
@@ -28,6 +195,397 @@
     <button id="nextBtn">Next →</button>
   </footer>
 
-  <script src="app.js"></script>
+  <script>
+    const lessons = [
+      {
+        id: "S1",
+        title: "Scales",
+        category: "Foundation",
+        targetBpm: 80,
+        pages: [
+          {
+            heading: "Scale Systems",
+            body: "Major, Harmonic Minor, Melodic Minor, Whole Tone, Diminished and modal systems.",
+            tab: `Major
+Harmonic Minor
+Melodic Minor
+Whole Tone
+Diminished
+
+Modes:
+Ionian
+Dorian
+Phrygian
+Lydian
+Mixolydian
+Aeolian
+Locrian`
+          },
+          {
+            heading: "Advanced Modes",
+            body: "Extended modal colors and altered systems.",
+            tab: `Aug Ionian
+Dorian #11
+Phrygian nat 6
+Phrygian Dom
+Lydian #5
+Lydian #9
+Mixolydian #11
+Mixolydian b13
+Ultralocrian
+Locrian nat 9
+Locrian nat 6
+Altered Scale`
+          }
+        ]
+      },
+      {
+        id: "A1",
+        title: "Arpeggios",
+        category: "Arpeggio System",
+        targetBpm: 75,
+        pages: [
+          {
+            heading: "Arpeggios + Full Range",
+            body: "Single octave, two octave and full range arpeggio studies.",
+            tab: `Arpeggios
+Full Range Arp
+Arp Intervals
+Arp Sequences
+2 Oct Arpeggios
+Arp Tensions`
+          }
+        ]
+      },
+      {
+        id: "D2",
+        title: "Drop 2",
+        category: "Harmony",
+        targetBpm: 65,
+        pages: [
+          {
+            heading: "Drop 2 System",
+            body: "Drop 2 on string sets with tensions and harmonisation.",
+            tab: `Drop 2
+Drop 2 on String
+Drop 2 Tensions
+Scale Harmonisation
+3 String Voicing`
+          }
+        ]
+      },
+      {
+        id: "D3",
+        title: "Drop 3",
+        category: "Harmony",
+        targetBpm: 65,
+        pages: [
+          {
+            heading: "Drop 3 System",
+            body: "Drop 3 voicings with tensions and string-set application.",
+            tab: `Drop 3
+Drop 3 on String
+Drop 3 Tensions`
+          }
+        ]
+      },
+      {
+        id: "T1",
+        title: "Technique",
+        category: "Picking + Mechanics",
+        targetBpm: 90,
+        pages: [
+          {
+            heading: "Technique Blocks",
+            body: "Mechanical picking and articulation systems.",
+            tab: `Alternate
+Economy
+Economy
+Hybrid
+Hybrid
+Hybrid Divided
+Hybrid Divided
+Slap
+Tapping
+B. Frisell Tech
+Notes in Grip`
+          }
+        ]
+      },
+      {
+        id: "C1",
+        title: "Chordal + Linear Blocks",
+        category: "Application",
+        targetBpm: 60,
+        pages: [
+          {
+            heading: "Blocks + Progressions",
+            body: "Chordal blocks, linear blocks and progression studies.",
+            tab: `Chordal Blocks
+Linear Blocks
+Progressions
+
+I-III-IV-V
+I-III-II-V
+I-VI-II-V
+III-VI-II-V
+I-IV-VII-III-VI-II-V
+II-V-I-VI
+Imaj-I7-IVm-bVII
+I-VIIhalfdim-III7-VIm`
+          }
+        ]
+      },
+      {
+        id: "H1",
+        title: "Harmony Map",
+        category: "Intervals + Voicings",
+        targetBpm: 60,
+        pages: [
+          {
+            heading: "Study Order",
+            body: "Structured harmonic path from intervals to seventh chords and sequences.",
+            tab: `1 Intervals
+2 Triads (3rds and 4ths) + inversions
+3 Close Voicing
+4 Drop2 + tensions
+5 Drop3 + tensions
+6 Suspended chords
+7 Quartal chords
+8 Scale
+9 Intervals
+10 Triads
+11 Seventh chords
+12 Sequences 3,4,5
+13 Arpeggios
+13 Two Octave Arpeggios
+14 Arp Tensions`
+          }
+        ]
+      },
+      {
+        id: "CH1",
+        title: "Chord Quality Reference",
+        category: "Chord Formula",
+        targetBpm: 50,
+        pages: [
+          {
+            heading: "Chord Tensions",
+            body: "Reference map for tensions and chord qualities.",
+            tab: `Maj7 / Min7 / MinMaj7 / HalfDim / Dim / MajAug / Dom7 / Dom7sus / Dom7aug
+
+Extensions:
+b9  9  #9
+b3  3
+b11 11 #11
+b5  5  #5
+b13 13
+bb7 b7 7
+sus  Maj7`
+          }
+        ]
+      }
+    ];
+
+    let currentLessonIndex = null;
+    let currentPageIndex = 0;
+    const app = document.getElementById("app");
+    const nextBtn = document.getElementById("nextBtn");
+    const backBtn = document.getElementById("backBtn");
+    const homeBtn = document.getElementById("homeBtn");
+    const bpmInput = document.getElementById("bpmInput");
+    const bpmSlider = document.getElementById("bpmSlider");
+    const metroToggle = document.getElementById("metroToggle");
+    let audioContext = null;
+    let timerId = null;
+    let isPlaying = false;
+
+    function getProgress() {
+      return JSON.parse(localStorage.getItem("guitarPracticeProgress") || "{}");
+    }
+    function saveProgress(progress) {
+      localStorage.setItem("guitarPracticeProgress", JSON.stringify(progress));
+    }
+    function getGlobalBpm() {
+      return Number(localStorage.getItem("globalMetronomeBpm") || 80);
+    }
+
+    function setGlobalBpm(value) {
+      localStorage.setItem("globalMetronomeBpm", String(value));
+    }
+
+    function syncBpm(value) {
+      const bpm = Math.max(30, Math.min(240, Number(value) || 80));
+      bpmInput.value = bpm;
+      bpmSlider.value = bpm;
+      setGlobalBpm(bpm);
+      if (currentLessonIndex !== null) {
+        const lesson = lessons[currentLessonIndex];
+        const progress = getProgress();
+        progress[lesson.id] = progress[lesson.id] || {};
+        progress[lesson.id].lastBpm = bpm;
+        saveProgress(progress);
+      }
+      if (isPlaying) {
+        stopMetronome();
+        startMetronome();
+      }
+    }
+    bpmInput.addEventListener("input", e => syncBpm(e.target.value));
+    bpmSlider.addEventListener("input", e => syncBpm(e.target.value));
+
+    function clickSound(accent = false) {
+      const osc = audioContext.createOscillator();
+      const gain = audioContext.createGain();
+      osc.frequency.value = accent ? 1200 : 850;
+      gain.gain.setValueAtTime(0.001, audioContext.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.4, audioContext.currentTime + 0.005);
+      gain.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.06);
+      osc.connect(gain);
+      gain.connect(audioContext.destination);
+      osc.start();
+      osc.stop(audioContext.currentTime + 0.07);
+    }
+    function startMetronome() {
+      audioContext = audioContext || new AudioContext();
+      isPlaying = true;
+      metroToggle.textContent = "Stop";
+      let beat = 0;
+      clickSound(true);
+      const interval = 60000 / Number(bpmInput.value);
+      timerId = setInterval(() => {
+        beat = (beat + 1) % 4;
+        clickSound(beat === 0);
+      }, interval);
+    }
+    function stopMetronome() {
+      isPlaying = false;
+      metroToggle.textContent = "Start";
+      clearInterval(timerId);
+      timerId = null;
+    }
+    metroToggle.addEventListener("click", () => isPlaying ? stopMetronome() : startMetronome());
+
+    function renderHome() {
+      currentLessonIndex = null;
+      currentPageIndex = 0;
+      const progress = getProgress();
+      app.innerHTML = `
+        <section class="card">
+          <h1>Guitar Practice</h1>
+          <p class="meta">Select a lesson. The metronome stays fixed at the top.</p>
+        </section>
+        <section>
+          ${lessons.map((lesson, index) => {
+            const p = progress[lesson.id] || {};
+            const status = p.completed ? "Completed" : "Not completed";
+            const best = p.bestBpm ? `Best BPM: ${p.bestBpm}` : `Target BPM: ${lesson.targetBpm}`;
+            return `<button class="lesson-button" onclick="openLesson(${index}, 0)">
+              <span class="lesson-id">${lesson.id}</span><strong>${lesson.title}</strong>
+              <div class="meta">${lesson.category} · ${status} · ${best}</div>
+            </button>`;
+          }).join("")}
+        </section>`;
+    }
+    function openLesson(lessonIndex, pageIndex = 0) {
+      currentLessonIndex = lessonIndex;
+      currentPageIndex = pageIndex;
+      const lesson = lessons[lessonIndex];
+      const progress = getProgress();
+      const saved = progress[lesson.id] || {};
+      syncBpm(getGlobalBpm() || saved.lastBpm || lesson.targetBpm);
+      renderLesson();
+    }
+    function renderLesson() {
+      const lesson = lessons[currentLessonIndex];
+      const page = lesson.pages[currentPageIndex];
+      const progress = getProgress();
+      const saved = progress[lesson.id] || {};
+      app.innerHTML = `
+        <section class="card">
+          <div class="meta">${lesson.id} · ${lesson.category} · Page ${currentPageIndex + 1} of ${lesson.pages.length}</div>
+          <h1>${lesson.title}</h1>
+          <h2>${page.heading}</h2>
+          <p>${page.body}</p>
+        </section>
+        <section class="card">
+          <h3>Tab / Fingering</h3>
+          <div class="tab-box"><pre>${page.tab}</pre></div>
+        </section>
+        <section class="card">
+          <h3>Practice Progress</h3>
+          <div class="progress-grid">
+            <button class="primary" onclick="markComplete()">Mark Complete</button>
+            <button onclick="saveBestBpm()">Save Current BPM as Best</button>
+          </div>
+          <p class="meta">Best BPM: ${saved.bestBpm || "—"} · Completed: ${saved.completed ? "Yes" : "No"}</p>
+          <textarea id="lessonNotes" placeholder="Practice notes...">${saved.notes || ""}</textarea>
+          <button onclick="saveNotes()">Save Notes</button>
+        </section>`;
+    }
+    function markComplete() {
+      const lesson = lessons[currentLessonIndex];
+      const progress = getProgress();
+      progress[lesson.id] = progress[lesson.id] || {};
+      progress[lesson.id].completed = true;
+      progress[lesson.id].lastPracticed = new Date().toISOString().slice(0, 10);
+      saveProgress(progress);
+      renderLesson();
+    }
+    function saveBestBpm() {
+      const lesson = lessons[currentLessonIndex];
+      const progress = getProgress();
+      progress[lesson.id] = progress[lesson.id] || {};
+      progress[lesson.id].bestBpm = Number(bpmInput.value);
+      progress[lesson.id].lastPracticed = new Date().toISOString().slice(0, 10);
+      saveProgress(progress);
+      renderLesson();
+    }
+    function saveNotes() {
+      const lesson = lessons[currentLessonIndex];
+      const progress = getProgress();
+      progress[lesson.id] = progress[lesson.id] || {};
+      progress[lesson.id].notes = document.getElementById("lessonNotes").value;
+      saveProgress(progress);
+      renderLesson();
+    }
+    function nextPage() {
+      if (currentLessonIndex === null) return;
+      const lesson = lessons[currentLessonIndex];
+      if (currentPageIndex < lesson.pages.length - 1) {
+        currentPageIndex++;
+        renderLesson();
+        window.scrollTo(0, 0);
+        return;
+      }
+      if (currentLessonIndex < lessons.length - 1) {
+        openLesson(currentLessonIndex + 1, 0);
+        window.scrollTo(0, 0);
+        return;
+      }
+      syncBpm(getGlobalBpm());
+    renderHome();
+    }
+    function previousPage() {
+      if (currentLessonIndex === null) return;
+      if (currentPageIndex > 0) {
+        currentPageIndex--;
+        renderLesson();
+        window.scrollTo(0, 0);
+        return;
+      }
+      if (currentLessonIndex > 0) {
+        const previousLesson = lessons[currentLessonIndex - 1];
+        openLesson(currentLessonIndex - 1, previousLesson.pages.length - 1);
+        window.scrollTo(0, 0);
+        return;
+      }
+      renderHome();
+    }
+    nextBtn.addEventListener("click", nextPage);
+    backBtn.addEventListener("click", previousPage);
+    homeBtn.addEventListener("click", renderHome);
+    renderHome();
+  </script>
 </body>
 </html>
