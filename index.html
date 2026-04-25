@@ -397,8 +397,28 @@ sus  Maj7`
     const bpmSlider = document.getElementById("bpmSlider");
     const metroToggle = document.getElementById("metroToggle");
     let audioContext = null;
+    let wakeLock = null;
     let timerId = null;
     let isPlaying = false;
+
+    async function requestWakeLock() {
+      try {
+        if ("wakeLock" in navigator) {
+          wakeLock = await navigator.wakeLock.request("screen");
+          wakeLock.addEventListener("release", () => {
+            console.log("Wake lock released");
+          });
+        }
+      } catch (err) {
+        console.log("Wake lock not supported:", err);
+      }
+    }
+
+    document.addEventListener("visibilitychange", async () => {
+      if (wakeLock !== null && document.visibilityState === "visible") {
+        await requestWakeLock();
+      }
+    });
 
     function getProgress() {
       return JSON.parse(localStorage.getItem("guitarPracticeProgress") || "{}");
@@ -473,6 +493,7 @@ sus  Maj7`
       if (isPlaying) {
         stopMetronome();
       } else {
+        await requestWakeLock();
         await startMetronome();
       }
     });
