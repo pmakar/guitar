@@ -6,8 +6,7 @@
   <title>Guitar Practice App</title>
   <style>
     :root {
-      --top-height: 104px;
-      --bottom-height: 72px;
+      --bottom-height: 128px;
       --bg: #111;
       --panel: #1c1c1c;
       --panel-2: #252525;
@@ -26,34 +25,16 @@
       color: var(--text);
     }
 
-    .metronome-bar {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      min-height: var(--top-height);
-      background: #050505;
-      border-bottom: 1px solid var(--line);
-      padding: 14px 16px;
-      z-index: 10;
-    }
-
-    .metro-row, .bpm-row {
-      display: flex;
+    .metronome-bottom {
+      display: grid;
+      grid-template-columns: 46px 76px 46px 1fr 86px;
+      gap: 8px;
       align-items: center;
-      gap: 12px;
+      width: 100%;
       max-width: 900px;
-      margin: 0 auto;
     }
 
-    .metro-row {
-      justify-content: space-between;
-      margin-bottom: 12px;
-    }
-
-    .bpm-row label { color: var(--muted); }
-
-    input[type="number"] {
+        input[type="number"] {
       width: 76px;
       padding: 8px;
       font-size: 18px;
@@ -84,7 +65,7 @@
     }
 
     main {
-      padding: calc(var(--top-height) + 18px) 16px calc(var(--bottom-height) + 18px);
+      padding: 18px 16px calc(var(--bottom-height) + 18px);
       max-width: 900px;
       margin: 0 auto;
     }
@@ -158,15 +139,25 @@
       min-height: var(--bottom-height);
       background: #050505;
       border-top: 1px solid var(--line);
-      display: flex;
+      display: grid;
+      grid-template-columns: 1fr;
       gap: 10px;
-      justify-content: center;
+      justify-items: center;
       align-items: center;
       padding: 10px 16px;
       z-index: 10;
     }
 
-    .bottom-nav button { min-width: 90px; }
+    .bottom-nav > button {
+      min-width: 90px;
+      display: inline-block;
+    }
+
+    .bottom-nav > button:nth-child(1),
+    .bottom-nav > button:nth-child(2),
+    .bottom-nav > button:nth-child(3) {
+      margin: 0 4px;
+    }
 
     @media (min-width: 720px) {
       main { padding-left: 24px; padding-right: 24px; }
@@ -175,24 +166,20 @@
   </style>
 </head>
 <body>
-  <header class="metronome-bar">
-    <div class="metro-row">
-      <strong>Metronome</strong>
-      <button id="metroToggle">Start</button>
-    </div>
-    <div class="bpm-row">
-      <label for="bpmInput">BPM</label>
-      <input id="bpmInput" type="number" min="0" max="240" step="5" value="80" />
-      <input id="bpmSlider" type="range" min="0" max="240" step="5" value="80" />
-    </div>
-  </header>
-
   <main id="app"></main>
 
   <footer class="bottom-nav">
     <button id="backBtn">←</button>
     <button id="homeBtn">Home</button>
     <button id="nextBtn">Next →</button>
+
+    <div class="metronome-bottom">
+      <button id="bpmDown">−</button>
+      <input id="bpmInput" type="number" min="0" max="240" step="5" value="80" />
+      <button id="bpmUp">+</button>
+      <input id="bpmSlider" type="range" min="0" max="240" step="5" value="80" />
+      <button id="metroToggle">Start</button>
+    </div>
   </footer>
 
   <script>
@@ -396,6 +383,8 @@ sus  Maj7`
     const bpmInput = document.getElementById("bpmInput");
     const bpmSlider = document.getElementById("bpmSlider");
     const metroToggle = document.getElementById("metroToggle");
+    const bpmDown = document.getElementById("bpmDown");
+    const bpmUp = document.getElementById("bpmUp");
     let audioContext = null;
     let wakeLock = null;
     let timerId = null;
@@ -479,6 +468,14 @@ sus  Maj7`
       if (Number(bpmSlider.value) > 0) {
         await startMetronome();
       }
+    });
+
+    bpmDown.addEventListener("click", () => {
+      syncBpm(Number(bpmInput.value) - 5);
+    });
+
+    bpmUp.addEventListener("click", () => {
+      syncBpm(Number(bpmInput.value) + 5);
     });
 
     function clickSound(accent = false) {
