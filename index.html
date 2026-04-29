@@ -246,6 +246,20 @@
       background:linear-gradient(180deg,rgba(255,255,255,.035),rgba(0,0,0,.15)),#0d1215;
     }
     .visual-card strong{display:block;margin-bottom:8px;color:#fff;font-size:18px;text-transform:uppercase}
+    .string-set-break{
+      grid-column:1/-1;
+      margin-top:12px;
+      padding:10px 12px;
+      border-top:2px solid var(--accent);
+      border-bottom:1px solid var(--line);
+      color:var(--accent-2);
+      background:#090d10;
+      font-size:15px;
+      font-weight:900;
+      text-transform:uppercase;
+      letter-spacing:.08em;
+    }
+    .string-set-break:first-child{margin-top:0}
     .diagram-row{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}
     .diagram-block{min-width:150px;flex:1 1 150px}
     .diagram-label{margin-bottom:6px;color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.06em}
@@ -292,6 +306,19 @@
       text-transform:uppercase;
     }
     .scale-board-title span{color:var(--accent-2);font-size:14px}
+    .scale-board-title strong{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+    .scale-board-title strong span{
+      display:inline-flex;
+      align-items:center;
+      min-height:24px;
+      padding:3px 8px;
+      border:1px solid rgba(217,179,108,.35);
+      border-radius:999px;
+      background:#090d10;
+      color:var(--accent-2);
+      font-size:13px;
+      line-height:1;
+    }
     .tab-box,.fretboard-wrap{
       overflow-x:auto;
       border:1px solid var(--line);
@@ -363,17 +390,68 @@
 
 <script>
 const dropQualities={
-  root:[["Maj7","1 5 7 3"],["Min7","1 5 b7 b3"],["Dom7","1 5 b7 3"],["HalfDim","1 b5 b7 b3"]],
-  first:[["Maj7","3 7 1 5"],["Min7","b3 b7 1 5"],["Dom7","3 b7 1 5"],["HalfDim","b3 b7 1 b5"]],
-  second:[["Maj7","5 1 3 7"],["Min7","5 1 b3 b7"],["Dom7","5 1 3 b7"],["HalfDim","b5 1 b3 b7"]],
-  third:[["Maj7","7 3 5 1"],["Min7","b7 b3 5 1"],["Dom7","b7 3 5 1"],["HalfDim","b7 b3 b5 1"]]
+  Maj7:["1","3","5","7"],
+  Min7:["1","b3","5","b7"],
+  MinMaj7:["1","b3","5","7"],
+  HalfDim:["1","b3","b5","b7"],
+  Dim:["1","b3","b5","bb7"],
+  MajAug:["1","3","#5","7"],
+  Dom7:["1","3","5","b7"],
+  Dom7sus:["1","4","5","b7"],
+  Dom7aug:["1","3","#5","b7"]
 };
+const dropInversions=[
+  ["Root Position",[0,2,3,1]],
+  ["1st Inversion",[1,3,0,2]],
+  ["2nd Inversion",[2,0,1,3]],
+  ["3rd Inversion",[3,1,2,0]]
+];
+const drop3Inversions=[
+  ["Root Position",[0,3,1,2]],
+  ["1st Inversion",[1,0,2,3]],
+  ["2nd Inversion",[2,1,3,0]],
+  ["3rd Inversion",[3,2,0,1]]
+];
+const drop2StringSets=[
+  ["E String","E A D G",3],
+  ["A String","A D G B",10],
+  ["D String","D G B e",5]
+];
+const drop3StringSets=[
+  ["E String","E D G B",3],
+  ["A String","A G B e",10]
+];
 function makeDropPages(type,inversion,cards){
   return [
     {heading:`${inversion} - Shape First`,body:"Learn the grip shape first. Static control before movement.",cards:cards.map(c=>[c[0],c[1],"main shape"])},
     {heading:`${inversion} - Diatonically`,body:"Run the same shape through the key: I ii iii IV V vi vii°.",cards:[["Key of G","Gmaj7 -> Am7 -> Bm7 -> Cmaj7 -> D7 -> Em7 -> F#m7b5","full harmonisation"]]},
     {heading:`${inversion} - II-V-I`,body:"Apply the same shape to real harmonic movement.",cards:[["Major II-V-I","Am7 -> D7 -> Gmaj7","essential"],["Minor II-V-I","Bm7b5 -> E7 -> AmMaj7","advanced"]]}
   ];
+}
+function makeDrop2Cards(){
+  return makeDropCards(dropInversions,drop2StringSets,"E, A and D string voicings");
+}
+function makeDrop3Cards(){
+  return makeDropCards(drop3Inversions,drop3StringSets,"E and A string voicings");
+}
+function makeDropCards(inversions,stringSets,label){
+  return inversions.flatMap(([group,order])=>Object.entries(dropQualities).map(([name,degrees])=>{
+    const voicedDegrees=order.map(index=>degrees[index]);
+    return [
+      name,
+      voicedDegrees.join(" "),
+      label,
+      {
+        group,
+        voicings:stringSets.map(([voicingLabel,strings,start])=>({
+          label:voicingLabel,
+          strings,
+          start,
+          degrees:voicedDegrees
+        }))
+      }
+    ];
+  }));
 }
 const triadStringSets=[
   ["Strings 6-5-4","E A D"],
@@ -386,25 +464,119 @@ const triadInversions=[
   ["1st Inversion","3 5 1"],
   ["2nd Inversion","5 1 3"]
 ];
+const triadQualities=[
+  ["Major",["1","3","5"]],
+  ["Minor",["1","b3","5"]],
+  ["Diminished",["1","b3","b5"]],
+  ["Augmented",["1","3","#5"]]
+];
+function invertDegrees(degrees,index){
+  return degrees.slice(index).concat(degrees.slice(0,index));
+}
 function makeTriadStringSetCards(){
-  return triadStringSets.flatMap(set=>triadInversions.map(inversion=>[
-    `${set[0]} - ${inversion[0]}`,
-    inversion[1],
+  return triadStringSets.flatMap(set=>triadQualities.flatMap(quality=>triadInversions.map((inversion,index)=>[
+    `${quality[0]} - ${inversion[0]}`,
+    invertDegrees(quality[1],index).join(" "),
     set[1],
-    {strings:set[1],degrees:inversion[1].split(" ")}
+    {group:set[0],strings:set[1],degrees:invertDegrees(quality[1],index),fretShift:2}
+  ])));
+}
+const arpeggioQualities=[
+  ["Major",["1","3","5"]],
+  ["Minor",["1","b3","5"]],
+  ["Diminished",["1","b3","b5"]],
+  ["Augmented",["1","3","#5"]],
+  ...Object.entries(dropQualities)
+];
+const arpeggioPositions=[
+  ["Root on E String","All notes in position",{strings:[6,5,4,3,2,1],start:3}],
+  ["Root on A String","All notes in position",{strings:[5,4,3,2,1],start:10}]
+];
+function makeArpeggioCards(){
+  return arpeggioPositions.flatMap(([group,label,position])=>arpeggioQualities.map(([name,degrees])=>[
+    name,
+    degrees.join(" "),
+    label,
+    {group,arpeggio:{...position,degrees}}
   ]));
 }
+const susQualities=[
+  ["Sus2add4",["1","2","4","5"]],
+  ["7sus2",["1","2","5","b7"]],
+  ["7sus4",["1","4","5","b7"]],
+  ["9sus4",["1","4","b7","9"]],
+  ["13sus4",["1","4","b7","6"]],
+  ["11sus",["1","5","b7","4"]]
+];
+const quartalQualities=[
+  ["Perfect Quartal",["1","4","b7","b3"]],
+  ["Major Quartal",["1","4","7","3"]],
+  ["Lydian Quartal",["1","#4","7","3"]],
+  ["Dominant Quartal",["1","4","b7","3"]],
+  ["Altered Quartal",["1","#4","b7","b3"]]
+];
+const chordVoicingSets={
+  3:[
+    ["E String","E A D",3],
+    ["A String","A D G",10]
+  ],
+  4:[
+    ["E String","E A D G",3],
+    ["A String","A D G B",10]
+  ],
+  5:[
+    ["E String","E A D G B",3],
+    ["A String","A D G B e",10]
+  ]
+};
+function inversionLabel(index){
+  return ["Root","1st","2nd","3rd","4th"][index]||`${index + 1}th`;
+}
+function stringNumbersFromNames(stringsValue){
+  const stringNames={e:1,B:2,G:3,D:4,A:5,E:6};
+  return String(stringsValue).split(/\s+/).map(token=>stringNames[token]).filter(Boolean);
+}
+function isPlayableVoicing(degrees,strings,start,maxSpan=4){
+  const stringsNumbers=stringNumbersFromNames(strings);
+  const pcs=degrees.map(degree=>(scaleRootG+(degreePc[degree]??0))%12);
+  const frets=compactFretsForPcs(stringsNumbers,pcs,start);
+  return Math.max(...frets)-Math.min(...frets)<=maxSpan;
+}
+function makeChordVoicingCards(category,qualities){
+  return ["E String","A String"].flatMap(setName=>qualities.flatMap(([name,degrees])=>{
+    const set=(chordVoicingSets[degrees.length]||chordVoicingSets[4]).find(item=>item[0]===setName);
+    if(!set)return [];
+    const [,strings,start]=set;
+    return degrees.map((_,index)=>{
+      const voicedDegrees=invertDegrees(degrees,index);
+      return [
+        `${name} - ${inversionLabel(index)}`,
+        voicedDegrees.join(" "),
+        strings,
+        {group:`${category} - ${setName}`,strings,degrees:voicedDegrees,start}
+      ];
+    }).filter(card=>isPlayableVoicing(card[3].degrees,card[3].strings,card[3].start));
+  }));
+}
+function makeSusQuartalCards(){
+  return [
+    ...makeChordVoicingCards("Suspended",susQualities),
+    ...makeChordVoicingCards("Quartal",quartalQualities)
+  ];
+}
 const majorModeShapes=[
-  {mode:"Aeolian",root:"E",shapeIndex:5},
-  {mode:"Locrian",root:"F#",shapeIndex:6},
-  {mode:"Ionian",root:"G",shapeIndex:0},
-  {mode:"Dorian",root:"A",shapeIndex:1},
-  {mode:"Phrygian",root:"B",shapeIndex:2},
-  {mode:"Lydian",root:"C",shapeIndex:3},
-  {mode:"Mixolydian",root:"D",shapeIndex:4}
+  {mode:"Aeolian",chord:"Em7",root:"E",shapeIndex:5},
+  {mode:"Locrian",chord:"F#m7b5",root:"F#",shapeIndex:6},
+  {mode:"Ionian",chord:"Gmaj7",root:"G",shapeIndex:0},
+  {mode:"Dorian",chord:"Am7",root:"A",shapeIndex:1},
+  {mode:"Phrygian",chord:"Bm7",root:"B",shapeIndex:2},
+  {mode:"Lydian",chord:"Cmaj7#11",root:"C",shapeIndex:3},
+  {mode:"Mixolydian",chord:"D7",root:"D",shapeIndex:4}
 ];
 const pitchNames=["C","Db","D","Eb","E","F","Gb","G","Ab","A","Bb","B"];
 const stringPitch={1:4,2:11,3:7,4:2,5:9,6:4};
+const notePc={C:0,"C#":1,Db:1,D:2,"D#":3,Eb:3,E:4,F:5,"F#":6,Gb:6,G:7,"G#":8,Ab:8,A:9,"A#":10,Bb:10,B:11};
+const degreePc={"1":0,R:0,b2:1,"2":2,b3:3,"3":4,"4":5,"#4":6,b5:6,"5":7,"#5":8,b6:8,"6":9,bb7:9,b7:10,"7":11,"9":2};
 const scaleRootG=7;
 const scaleIntervals={
   harmonicMinor:[0,2,3,5,7,8,11],
@@ -429,9 +601,10 @@ function makeScaleShape(name,startFret,rootPc,intervals){
   }
   return {name:`${name} - 3NPS`,startFret,root:pitchNames[rootPc],notes};
 }
-function makeScaleBoards(labels,startFrets,rootPc,intervals){
+function makeScaleBoards(labels,startFrets,rootPc,intervals,chords=[]){
   return labels.map((label,index)=>({
     mode:label,
+    chord:chords[index]||"",
     shape:makeScaleShape(label,startFrets[index],rootPc,intervals)
   }));
 }
@@ -439,21 +612,23 @@ const harmonicMinorShapes=makeScaleBoards(
   ["Harmonic Minor","Locrian Natural 6","Ionian Augmented","Dorian Sharp 4","Phrygian Dominant","Lydian Sharp 2","Altered Diminished"],
   [3,5,6,8,10,11,14],
   scaleRootG,
-  scaleIntervals.harmonicMinor
+  scaleIntervals.harmonicMinor,
+  ["GmMaj7","Am7b5","Bbmaj7#5","Cm7","D7b9b13","Ebmaj7#5","F#dim7"]
 );
 const melodicMinorShapes=makeScaleBoards(
   ["Melodic Minor","Dorian Flat 2","Lydian Augmented","Lydian Dominant","Mixolydian Flat 6","Locrian Natural 2","Altered"],
   [3,5,6,8,10,12,14],
   scaleRootG,
-  scaleIntervals.melodicMinor
+  scaleIntervals.melodicMinor,
+  ["GmMaj7","Am7","Bbmaj7#5","C7#11","D7b13","Em7b5","F#7alt"]
 );
 const wholeToneShapes=[
-  {mode:"G Whole Tone",shape:makeScaleShape("G Whole Tone",3,7,scaleIntervals.wholeTone)},
-  {mode:"Ab Whole Tone",shape:makeScaleShape("Ab Whole Tone",4,8,scaleIntervals.wholeTone)}
+  {mode:"G Whole Tone",chord:"G7#5",shape:makeScaleShape("G Whole Tone",3,7,scaleIntervals.wholeTone)},
+  {mode:"Ab Whole Tone",chord:"Ab7#5",shape:makeScaleShape("Ab Whole Tone",4,8,scaleIntervals.wholeTone)}
 ];
 const diminishedShapes=[
-  {mode:"G Half-Whole Diminished",shape:makeScaleShape("G Half-Whole",3,7,scaleIntervals.halfWholeDiminished)},
-  {mode:"G Whole-Half Diminished",shape:makeScaleShape("G Whole-Half",3,7,scaleIntervals.wholeHalfDiminished)}
+  {mode:"G Half-Whole Diminished",chord:"G7b9",shape:makeScaleShape("G Half-Whole",3,7,scaleIntervals.halfWholeDiminished)},
+  {mode:"G Whole-Half Diminished",chord:"Gdim7",shape:makeScaleShape("G Whole-Half",3,7,scaleIntervals.wholeHalfDiminished)}
 ];
 function makeScaleLesson(id,title,modes=majorModeShapes,shapeHeading="Scale Shapes"){
   return {id:String(id),title,category:"Scales",targetBpm:80,visualType:"scalar",pages:[{
@@ -483,17 +658,10 @@ const lessons=[
   makeScaleLesson(4,"Whole Tone Scale",wholeToneShapes,"3 Notes Per String"),
   makeScaleLesson(5,"Diminished Scale",diminishedShapes,"3 Notes Per String"),
   {id:"6",title:"Triads",category:"Triads",targetBpm:65,visualType:"stringSets",pages:[{heading:"String Sets and Inversions",body:"All triad inversions ordered from the bottom strings toward the top.",cards:makeTriadStringSetCards()}]},
-  {id:"7",title:"Drop 2",category:"Voicings",targetBpm:60,visualType:"voicing",pages:makeDropPages("Drop 2","Root Position",dropQualities.root)},
-  {id:"8",title:"Drop 2 - 1st Inversion",category:"Voicings",targetBpm:60,visualType:"voicing",pages:makeDropPages("Drop 2","1st Inversion",dropQualities.first)},
-  {id:"9",title:"Drop 2 - 2nd Inversion",category:"Voicings",targetBpm:60,visualType:"voicing",pages:makeDropPages("Drop 2","2nd Inversion",dropQualities.second)},
-  {id:"10",title:"Drop 2 - 3rd Inversion",category:"Voicings",targetBpm:60,visualType:"voicing",pages:makeDropPages("Drop 2","3rd Inversion",dropQualities.third)},
-  {id:"11",title:"Drop 3",category:"Voicings",targetBpm:60,visualType:"voicing",pages:makeDropPages("Drop 3","Root Position",[["Maj7","1 7 3 5"],["Min7","1 b7 b3 5"],["Dom7","1 b7 3 5"],["HalfDim","1 b7 b3 b5"]])},
-  {id:"12",title:"Drop 3 - 1st Inversion",category:"Voicings",targetBpm:60,visualType:"voicing",pages:makeDropPages("Drop 3","1st Inversion",[["Maj7","3 1 5 7"],["Min7","b3 1 5 b7"],["Dom7","3 1 5 b7"],["HalfDim","b3 1 b5 b7"]])},
-  {id:"13",title:"Drop 3 - 2nd Inversion",category:"Voicings",targetBpm:60,visualType:"voicing",pages:makeDropPages("Drop 3","2nd Inversion",[["Maj7","5 3 7 1"],["Min7","5 b3 b7 1"],["Dom7","5 3 b7 1"],["HalfDim","b5 b3 b7 1"]])},
-  {id:"14",title:"Drop 3 - 3rd Inversion",category:"Voicings",targetBpm:60,visualType:"voicing",pages:makeDropPages("Drop 3","3rd Inversion",[["Maj7","7 5 1 3"],["Min7","b7 5 1 b3"],["Dom7","b7 5 1 3"],["HalfDim","b7 b5 1 b3"]])},
-  {id:"15",title:"Arpeggios - All",category:"Arpeggios",targetBpm:70,visualType:"arpeggio",pages:[{heading:"Triad Arpeggios",body:"Core triad qualities.",cards:[["Major","1 3 5","G B D"],["Minor","1 b3 5","A C E"],["Dim","1 b3 b5","F# A C"],["Aug","1 3 #5","G B D#"]]},{heading:"Seventh Arpeggios",body:"Core seventh chord qualities.",cards:[["Maj7","1 3 5 7","G B D F#"],["Min7","1 b3 5 b7","A C E G"],["Dom7","1 3 5 b7","D F# A C"],["HalfDim","1 b3 b5 b7","F# A C E"],["Dim7","1 b3 b5 bb7","F# A C Eb"]]}]},
-  {id:"16",title:"Suspended Chords",category:"Chords",targetBpm:60,visualType:"chordGrid",pages:[{heading:"Suspended Chord Types",body:"Replace the 3rd with 2 or 4.",cards:[["Sus2","1 2 5","open"],["Sus4","1 4 5","classic"],["7sus4","1 4 5 b7","dominant sus"],["9sus","1 4 5 b7 9","fusion"]]}]},
-  {id:"17",title:"Quartal Chords",category:"Modern Voicings",targetBpm:60,visualType:"chordGrid",pages:[{heading:"Quartal Structures",body:"Fourth-based harmony.",cards:[["Perfect 4ths","1 4 b7","stacked fourths"],["Mixed 4ths","1 4 7","lydian brightness"],["Tritone Color","1 #4 7","horror tension"],["Low Quartal","5 1 4","heavy riff grip"]]}]}
+  {id:"7",title:"Drop 2",category:"Voicings",targetBpm:60,visualType:"voicing",pages:[{heading:"All Inversions",body:"All Drop 2 qualities grouped by inversion.",cards:makeDrop2Cards()}]},
+  {id:"8",title:"Drop 3",category:"Voicings",targetBpm:60,visualType:"voicing",pages:[{heading:"All Inversions",body:"All Drop 3 qualities grouped by inversion.",cards:makeDrop3Cards()}]},
+  {id:"9",title:"Arpeggios - All",category:"Arpeggios",targetBpm:70,visualType:"arpeggio",pages:[{heading:"All Chord Qualities",body:"All chord tones inside one position, with roots on E and A strings.",cards:makeArpeggioCards()}]},
+  {id:"10",title:"Sus and Quartal Chords",category:"Chords",targetBpm:60,visualType:"chordGrid",pages:[{heading:"4-Note Grips",body:"Playable suspended and quartal chord grips on E and A string roots.",cards:makeSusQuartalCards()}]}
 ];
 
 const shapeTabs=[
@@ -620,8 +788,6 @@ function renderFretboard(shape){
   return `<svg width="${width}" height="${height}" viewBox="0 0 ${width} ${height}" role="img" aria-label="Fretboard diagram">${fretNumbers}${labels}${stringLines}${fretLines}${dots}</svg>`;
 }
 function renderDegreeStrip(degrees=[]){return `<div class="degree-strip">${degrees.map(d=>`<span class="degree">${html(d)}</span>`).join("")}</div>`}
-const notePc={C:0,"C#":1,Db:1,D:2,"D#":3,Eb:3,E:4,F:5,"F#":6,Gb:6,G:7,"G#":8,Ab:8,A:9,"A#":10,Bb:10,B:11};
-const degreePc={"1":0,R:0,b2:1,"2":2,b3:3,"3":4,"4":5,"#4":6,b5:6,"5":7,"#5":8,b6:8,"6":9,bb7:9,b7:10,"7":11,"9":2};
 function findFretForPc(stringNumber,pc,start=3){
   for(let f=start;f<start+8;f++){
     if((stringPitch[stringNumber]+f)%12===pc)return f;
@@ -630,6 +796,32 @@ function findFretForPc(stringNumber,pc,start=3){
     if((stringPitch[stringNumber]+f)%12===pc)return f;
   }
   return start;
+}
+function candidateFretsForPc(stringNumber,pc){
+  const frets=[];
+  for(let f=0;f<=17;f++){
+    if((stringPitch[stringNumber]+f)%12===pc)frets.push(f);
+  }
+  return frets;
+}
+function compactFretsForPcs(strings,pcs,start=3){
+  const candidates=pcs.map((pc,index)=>candidateFretsForPc(strings[index],pc));
+  const combos=[];
+  function walk(index,current){
+    if(index===candidates.length){
+      const min=Math.min(...current),max=Math.max(...current);
+      const span=max-min;
+      const center=current.reduce((sum,f)=>sum+f,0)/current.length;
+      const openPenalty=current.filter(f=>f===0).length*1.5;
+      const score=span*10+Math.abs(center-start)*1.4+openPenalty;
+      combos.push({frets:current,score});
+      return;
+    }
+    candidates[index].forEach(fret=>walk(index+1,current.concat(fret)));
+  }
+  walk(0,[]);
+  combos.sort((a,b)=>a.score-b.score);
+  return combos[0]?.frets||pcs.map((pc,index)=>findFretForPc(strings[index],pc,start));
 }
 function chordRootPc(name){
   const match=String(name).match(/[A-G](?:#|b)?/);
@@ -667,15 +859,28 @@ function shapeFromPcs(name,pcs,start=3){
 function shapeFromDegrees(name,degrees,rootPc=scaleRootG,start=3){
   return shapeFromPcs(name,degrees.map(degree=>(rootPc+(degreePc[degree]??0))%12),start);
 }
-function shapeFromDegreesOnStrings(name,degrees,stringsValue,rootPc=scaleRootG,start=3){
+function shapeFromDegreesOnStrings(name,degrees,stringsValue,rootPc=scaleRootG,start=3,fretShift=0){
   const stringNames={e:1,B:2,G:3,D:4,A:5,E:6};
   const strings=String(stringsValue).split(/\s+/).map(token=>stringNames[token]).filter(Boolean);
+  const pcs=degrees.map(degree=>(rootPc+(degreePc[degree]??0))%12);
+  const frets=compactFretsForPcs(strings,pcs,start);
   const notes=degrees.map((degree,index)=>{
     const s=strings[index]||strings[strings.length-1]||1;
-    const pc=(rootPc+(degreePc[degree]??0))%12;
-    return {s,f:findFretForPc(s,pc,start),n:pitchNames[pc]};
+    const pc=pcs[index];
+    return {s,f:frets[index],n:pitchNames[pc]};
   });
-  return {name,startFret:Math.max(0,Math.min(...notes.map(note=>note.f))),notes};
+  return {name,startFret:Math.max(0,Math.min(...notes.map(note=>note.f))),notes,fretShift};
+}
+function shapeFromArpeggioPosition(name,degrees,strings,start,rootPc=scaleRootG){
+  const pcs=new Set(degrees.map(degree=>(rootPc+(degreePc[degree]??0))%12));
+  const notes=[];
+  strings.forEach(s=>{
+    for(let f=start;f<=start+4;f++){
+      const pc=(stringPitch[s]+f)%12;
+      if(pcs.has(pc))notes.push({s,f,n:pitchNames[pc]});
+    }
+  });
+  return {name,startFret:start,notes};
 }
 function parseDegreeTokens(value){
   return String(value).replace(/[·.]/g," ").split(/\s+/).map(token=>token.trim()).filter(token=>degreePc[token]!==undefined);
@@ -693,15 +898,16 @@ function stringSetShape(name,value){
   return {name,startFret:3,notes:strings.map((s,index)=>({s,f:frets[index]||3,n:""}))};
 }
 function renderMiniFretboard(shape){
+  const fretShift=shape.fretShift||0;
   const minFret=Math.max(0,Math.min(...shape.notes.map(note=>note.f)));
-  const maxFret=Math.max(...shape.notes.map(note=>note.f));
+  const maxFret=Math.max(...shape.notes.map(note=>note.f))+fretShift;
   const start=shape.startFret??Math.max(0,minFret-1);
   const fretsShown=Math.max(5,Math.min(8,maxFret-start+2));
   const width=280,height=128,left=34,top=18,stringGap=16,fretGap=28;
   const stringLines=[1,2,3,4,5,6].map((s,i)=>`<line x1="${left}" y1="${top+i*stringGap}" x2="${left+fretsShown*fretGap}" y2="${top+i*stringGap}" stroke="#6f7b82" stroke-width="${1+i*.18}"/>`).join("");
   const fretLines=Array.from({length:fretsShown+1},(_,i)=>`<line x1="${left+i*fretGap}" y1="${top}" x2="${left+i*fretGap}" y2="${top+stringGap*5}" stroke="#4e5960" stroke-width="${i===0?2:1}"/>`).join("");
   const dots=shape.notes.map(note=>{
-    const x=left+(note.f-start)*fretGap+fretGap/2,y=top+(note.s-1)*stringGap;
+    const x=left+(note.f+fretShift-start)*fretGap+fretGap/2,y=top+(note.s-1)*stringGap;
     return `<circle cx="${x}" cy="${y}" r="7" fill="#edf2f3" stroke="#090d10" stroke-width="1.5"/>`;
   }).join("");
   const labels=["e","B","G","D","A","E"].map((label,i)=>`<text x="12" y="${top+i*stringGap+4}" fill="#98a6ac" font-size="10">${label}</text>`).join("");
@@ -709,8 +915,15 @@ function renderMiniFretboard(shape){
 }
 function renderDiagramBlocks(card,type){
   const [title,value,,options]=card;
+  if(options?.arpeggio){
+    const arpeggio=options.arpeggio;
+    return `<div class="diagram-block">${renderMiniFretboard(shapeFromArpeggioPosition(title,arpeggio.degrees,arpeggio.strings,arpeggio.start))}</div>`;
+  }
+  if(options?.voicings){
+    return options.voicings.map(voicing=>`<div class="diagram-block"><div class="diagram-label">${html(voicing.label)}</div>${renderMiniFretboard(shapeFromDegreesOnStrings(`${title} ${voicing.label}`,voicing.degrees,voicing.strings,scaleRootG,voicing.start||3,voicing.fretShift||0))}</div>`).join("");
+  }
   if(options?.strings&&options?.degrees){
-    return `<div class="diagram-block">${renderMiniFretboard(shapeFromDegreesOnStrings(title,options.degrees,options.strings))}</div>`;
+    return `<div class="diagram-block">${renderMiniFretboard(shapeFromDegreesOnStrings(title,options.degrees,options.strings,scaleRootG,options.start||3,options.fretShift||0))}</div>`;
   }
   const progression=progressionNames(value);
   if(progression.length>1){
@@ -733,7 +946,13 @@ function renderDiagramBlocks(card,type){
   return `<div class="diagram-block">${renderMiniFretboard(shapeFromDegrees(title,chordFormula(title),chordRootPc(title)))}</div>`;
 }
 function renderCards(cards=[],type=""){
-  return `<div class="visual-grid">${cards.map(card=>`<div class="visual-card"><strong>${html(card[0])}</strong><div class="diagram-row">${renderDiagramBlocks(card,type)}</div><div class="meta">${html(card[2]||"")}</div></div>`).join("")}</div>`;
+  let activeGroup="";
+  return `<div class="visual-grid">${cards.map(card=>{
+    const group=card[3]?.group||"";
+    const header=group&&group!==activeGroup?`<div class="string-set-break">${html(group)} · ${html(card[2]||"")}</div>`:"";
+    if(group)activeGroup=group;
+    return `${header}<div class="visual-card"><strong>${html(card[0])}</strong><div class="diagram-row">${renderDiagramBlocks(card,type)}</div><div class="meta">${html(card[2]||"")}</div></div>`;
+  }).join("")}</div>`;
 }
 function renderScalarLesson(page){
   return `<div class="scalar-stack">
@@ -742,8 +961,10 @@ function renderScalarLesson(page){
       <div class="scale-board-list">${page.modes.map(mode=>{
         const shape=mode.shape||modeShapes3Nps[mode.shapeIndex];
         const root=mode.root||shape.root||mode.mode.split(" ")[0];
+        const chord=mode.chord?`<span>${html(mode.chord)}</span>`:"";
+        const shapeLabel=mode.mode===shape.name?"":`<span>${html(shape.name)}</span>`;
         return `<div class="scale-board">
-        <div class="scale-board-title"><strong>${html(mode.mode)}</strong>${mode.mode===shape.name?"":`<span>${html(shape.name)}</span>`}</div>
+        <div class="scale-board-title"><strong>${html(mode.mode)}${chord}</strong>${shapeLabel}</div>
         <div class="fretboard-wrap">${renderFretboard(shape,root,false)}</div>
       </div>`;
       }).join("")}</div>
