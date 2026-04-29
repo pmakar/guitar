@@ -3,693 +3,668 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title> Tempo Society</title>
+  <title>Shredmasster</title>
   <style>
-    :root {
-      --bottom-height: 128px;
-      --bg: #050505;
-      --panel: #1A1F24;
-      --panel-2: #232A30;
-      --text: #D8E0E3;
-      --muted: #8E9AA0;
-      --line: #2A2F35;
-      --accent: #8C1D18;
+    :root{
+      --bottom-height:118px;
+      --bg:#08090a;
+      --surface:#11161a;
+      --surface-2:#171e23;
+      --surface-3:#20282f;
+      --text:#edf2f3;
+      --muted:#98a6ac;
+      --line:#2b353c;
+      --accent:#b9362f;
+      --accent-2:#d9b36c;
+      --good:#63b37b;
+      --shadow:0 18px 52px rgba(0,0,0,.38);
     }
 
-    * { box-sizing: border-box; }
-
-    body {
-      touch-action: manipulation;
-      -webkit-text-size-adjust: 100%;
-      margin: 0;
-      font-family: Impact, Haettenschweiler, "Arial Narrow Bold", "DIN Condensed", "Roboto Condensed", system-ui, sans-serif;
-      letter-spacing: 0.35px;
+    *{box-sizing:border-box}
+    html{background:var(--bg)}
+    body{
+      min-height:100vh;
+      margin:0;
+      touch-action:manipulation;
+      -webkit-text-size-adjust:100%;
+      font-family:"Inter Tight","Roboto Condensed","Arial Narrow",system-ui,sans-serif;
+      letter-spacing:0;
+      color:var(--text);
       background:
-        radial-gradient(circle at 15% 10%, rgba(140, 29, 24, 0.22), transparent 28%),
-        radial-gradient(circle at 85% 20%, rgba(62, 92, 99, 0.16), transparent 26%),
-        repeating-linear-gradient(0deg, rgba(255,255,255,0.035) 0px, rgba(255,255,255,0.035) 1px, transparent 1px, transparent 6px),
-        repeating-linear-gradient(90deg, rgba(255,255,255,0.018) 0px, rgba(255,255,255,0.018) 1px, transparent 1px, transparent 18px),
-        linear-gradient(135deg, #050505 0%, #0B0F12 45%, #050505 100%);
-      color: var(--text);
+        linear-gradient(90deg,rgba(185,54,47,.16),transparent 26%,transparent 72%,rgba(217,179,108,.08)),
+        repeating-linear-gradient(0deg,rgba(255,255,255,.025) 0,rgba(255,255,255,.025) 1px,transparent 1px,transparent 8px),
+        radial-gradient(circle at 50% 0%,#182027 0,#08090a 58%);
     }
 
-    .metronome-bottom {
-      display: grid;
-      grid-template-columns: 46px 76px 46px 1fr 86px;
-      gap: 8px;
-      align-items: center;
-      width: 100%;
-      max-width: 900px;
+    button,input,textarea{font:inherit}
+    button{
+      appearance:none;
+      border:1px solid var(--line);
+      border-radius:8px;
+      background:linear-gradient(180deg,rgba(255,255,255,.07),rgba(0,0,0,.16)),var(--surface-2);
+      color:var(--text);
+      min-height:42px;
+      padding:10px 14px;
+      font-weight:750;
+      font-size:14px;
+      cursor:pointer;
+      text-transform:uppercase;
+      letter-spacing:.04em;
+      transition:transform .12s ease,border-color .12s ease,background .12s ease;
+    }
+    button:active{transform:translateY(1px)}
+    button.primary{background:linear-gradient(180deg,#d4483f,#9e2823);border-color:#e45c52;color:#fff}
+    button.ghost{background:#0b0f12}
+    button.icon{width:44px;padding:0;display:grid;place-items:center;font-size:20px}
+
+    input[type=number]{
+      width:78px;
+      height:42px;
+      padding:8px;
+      border:1px solid var(--line);
+      border-radius:8px;
+      background:#080b0d;
+      color:var(--text);
+      font-size:18px;
+      font-weight:800;
+      text-align:center;
+    }
+    input[type=range]{width:100%;accent-color:var(--accent)}
+    textarea{
+      width:100%;
+      min-height:96px;
+      resize:vertical;
+      border-radius:8px;
+      border:1px solid var(--line);
+      background:#090d10;
+      color:var(--text);
+      padding:12px;
+      font-size:16px;
+      line-height:1.45;
     }
 
-        input[type="number"] {
-      width: 76px;
-      padding: 8px;
-      font-size: 18px;
-      background: var(--panel);
-      color: var(--text);
-      border: 1px solid var(--line);
-      border-radius: 8px;
+    .top-nav{
+      position:fixed;
+      top:0;
+      left:0;
+      right:0;
+      z-index:20;
+      display:grid;
+      grid-template-columns:44px minmax(0,1fr) 44px;
+      align-items:center;
+      gap:10px;
+      padding:12px max(14px,env(safe-area-inset-left)) 10px;
+      background:rgba(7,9,11,.88);
+      border-bottom:1px solid var(--line);
+      backdrop-filter:blur(16px);
+    }
+    .brand{
+      min-width:0;
+      text-align:center;
+      font-weight:900;
+      text-transform:uppercase;
+      letter-spacing:.08em;
+      color:#fff;
+    }
+    .brand span{color:var(--accent-2)}
+
+    .bottom-nav{
+      position:fixed;
+      bottom:0;
+      left:0;
+      right:0;
+      z-index:20;
+      min-height:var(--bottom-height);
+      padding:12px max(14px,env(safe-area-inset-left)) max(12px,env(safe-area-inset-bottom));
+      background:rgba(7,9,11,.9);
+      border-top:1px solid var(--line);
+      backdrop-filter:blur(16px);
+    }
+    .metronome-bottom{
+      display:grid;
+      grid-template-columns:44px 78px 44px minmax(120px,1fr) 92px;
+      gap:10px;
+      align-items:center;
+      width:100%;
+      max-width:980px;
+      margin:0 auto;
     }
 
-    input[type="range"] { width: 100%; }
+    main{
+      width:min(100%,1040px);
+      margin:0 auto;
+      padding:88px 16px calc(var(--bottom-height) + 24px);
+    }
+    h1,h2,h3,p{margin-top:0}
+    h1{
+      margin-bottom:8px;
+      font-size:clamp(34px,7vw,72px);
+      line-height:.92;
+      text-transform:uppercase;
+      letter-spacing:.015em;
+    }
+    h2{font-size:clamp(24px,4vw,38px);line-height:1;margin-bottom:10px}
+    h3{font-size:17px;text-transform:uppercase;letter-spacing:.08em;color:var(--accent-2)}
+    p{line-height:1.55}
 
-    button {
-      appearance: none;
-      border: 1px solid var(--line);
-      border-radius: 6px;
+    .hero{
+      min-height:220px;
+      display:grid;
+      align-content:end;
+      border-radius:8px;
+      border:1px solid var(--line);
+      border-left:5px solid var(--accent);
+      padding:22px;
+      margin-bottom:16px;
+      box-shadow:var(--shadow);
       background:
-        linear-gradient(180deg, rgba(255,255,255,0.055), rgba(0,0,0,0.18)),
-        repeating-linear-gradient(90deg, rgba(255,255,255,0.025) 0px, rgba(255,255,255,0.025) 1px, transparent 1px, transparent 6px),
-        var(--panel-2);
-      color: var(--text);
-      padding: 10px 14px;
-      font-size: 16px;
-      cursor: pointer;
-      text-transform: uppercase;
-      letter-spacing: 0.7px;
+        linear-gradient(180deg,rgba(8,9,10,.08),rgba(8,9,10,.82)),
+        radial-gradient(circle at 90% 18%,rgba(217,179,108,.24),transparent 28%),
+        linear-gradient(135deg,#1e272d,#0c1013 58%,#08090a);
+    }
+    .card{
+      min-width:0;
+      background:linear-gradient(180deg,rgba(255,255,255,.045),rgba(0,0,0,.18)),var(--surface);
+      border:1px solid var(--line);
+      border-radius:8px;
+      padding:16px;
+      margin-bottom:14px;
+      box-shadow:0 10px 26px rgba(0,0,0,.2);
+    }
+    .meta{color:var(--muted);font-size:14px;line-height:1.45}
+    .subtle{color:var(--muted)}
+    .lesson-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(238px,1fr));gap:12px}
+    .lesson-button{
+      display:grid;
+      grid-template-rows:auto 1fr auto;
+      width:100%;
+      min-height:142px;
+      padding:15px;
+      text-align:left;
+      text-transform:none;
+      letter-spacing:0;
+      background:linear-gradient(160deg,rgba(255,255,255,.055),rgba(0,0,0,.12)),var(--surface-2);
+    }
+    .lesson-button:hover{border-color:#56636b}
+    .lesson-top{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}
+    .lesson-id{
+      display:grid;
+      place-items:center;
+      width:34px;
+      height:34px;
+      flex:0 0 auto;
+      border-radius:50%;
+      background:var(--accent);
+      color:#fff;
+      font-weight:900;
+    }
+    .lesson-title{font-size:20px;line-height:1.05;font-weight:900;text-transform:uppercase}
+    .status{
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      width:max-content;
+      border:1px solid var(--line);
+      border-radius:999px;
+      padding:5px 9px;
+      color:var(--muted);
+      font-size:12px;
+      text-transform:uppercase;
+      letter-spacing:.05em;
+    }
+    .status.done{color:#dff5e4;border-color:rgba(99,179,123,.5);background:rgba(99,179,123,.12)}
+
+    .toolbar{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      flex-wrap:wrap;
+    }
+    .pill-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      min-height:32px;
+      padding:6px 10px;
+      border:1px solid var(--line);
+      border-radius:999px;
+      background:#0c1114;
+      color:var(--muted);
+      font-size:14px;
+      line-height:1.2;
     }
 
-    button.primary {
-      background: var(--accent);
-      color: #111;
-      border-color: var(--accent);
-      font-weight: 700;
+    .content-grid{display:grid;grid-template-columns:1fr;gap:14px}
+    .content-grid>*{min-width:0}
+    .visual-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
+    .visual-card{
+      min-height:96px;
+      border:1px solid var(--line);
+      border-radius:8px;
+      padding:13px;
+      background:linear-gradient(180deg,rgba(255,255,255,.035),rgba(0,0,0,.15)),#0d1215;
     }
-
-    main {
-      padding: 80px 16px calc(var(--bottom-height) + 18px);
-      max-width: 900px;
-      margin: 0 auto;
+    .visual-card strong{display:block;margin-bottom:8px;color:#fff;font-size:18px;text-transform:uppercase}
+    .formula-line{font-family:"SFMono-Regular","Courier New",monospace;letter-spacing:0;color:var(--text);font-size:14px;line-height:1.5;white-space:pre-wrap}
+    .scalar-stack{display:grid;gap:14px}
+    .compact-list{display:grid;gap:8px}
+    .compact-row{
+      display:grid;
+      grid-template-columns:minmax(86px,.34fr) minmax(0,1fr);
+      gap:10px;
+      align-items:start;
+      border:1px solid var(--line);
+      border-radius:8px;
+      padding:11px 12px;
+      background:#0d1215;
     }
-
-    h1, h2, h3 { margin-top: 0; }
-
-    .card {
+    .compact-row strong{color:#fff;text-transform:uppercase}
+    .compact-row .meta{font-size:13px}
+    .scale-board-list{display:grid;gap:12px}
+    .scale-board{
+      min-width:0;
+      border:1px solid var(--line);
+      border-radius:8px;
+      padding:12px;
+      background:#0d1215;
+    }
+    .scale-board-title{
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      margin-bottom:10px;
+      color:#fff;
+      font-size:18px;
+      font-weight:900;
+      text-transform:uppercase;
+    }
+    .scale-board-title span{color:var(--accent-2);font-size:14px}
+    .tab-box,.fretboard-wrap{
+      overflow-x:auto;
+      border:1px solid var(--line);
+      border-radius:8px;
+      padding:14px;
       background:
-        linear-gradient(180deg, rgba(255,255,255,0.045), rgba(0,0,0,0.24)),
-        repeating-linear-gradient(135deg, rgba(255,255,255,0.03) 0px, rgba(255,255,255,0.03) 1px, transparent 1px, transparent 7px),
-        var(--panel);
-      border: 1px solid var(--line);
-      border-left: 4px solid rgba(140,29,24,0.75);
-      box-shadow: inset 0 1px 0 rgba(255,255,255,0.04), 0 12px 28px rgba(0,0,0,0.35);
-      border-radius: 8px;
-      padding: 16px;
-      margin-bottom: 14px;
+        repeating-linear-gradient(0deg,rgba(255,255,255,.025) 0,rgba(255,255,255,.025) 1px,transparent 1px,transparent 7px),
+        #0a0f12;
+      box-shadow:inset 0 0 24px rgba(0,0,0,.42);
     }
+    pre{margin:0;font-family:"SFMono-Regular","Courier New",monospace;font-size:15px;line-height:1.55;white-space:pre;letter-spacing:0}
 
-    .lesson-button {
-      width: 100%;
-      text-align: left;
-      margin-bottom: 10px;
-      padding: 16px;
+    .fretboard-controls{
+      display:grid;
+      grid-template-columns:44px 1fr 44px;
+      gap:10px;
+      align-items:center;
+      margin:10px 0 12px;
     }
-
-    .lesson-id {
-      color: var(--accent);
-      font-weight: 700;
-      margin-right: 8px;
+    .shape-title{text-align:center;font-weight:900;text-transform:uppercase;color:#fff}
+    .degree-strip{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+    .degree{
+      width:36px;
+      height:36px;
+      display:grid;
+      place-items:center;
+      border-radius:50%;
+      background:#edf2f3;
+      color:#090d10;
+      border:2px solid #090d10;
+      font-family:"SFMono-Regular","Courier New",monospace;
+      font-size:12px;
+      font-weight:900;
     }
+    .degree.root{background:var(--accent);color:#fff;border-color:#f1d6d4}
+    .progress-grid{display:grid;grid-template-columns:1fr;gap:10px;margin-bottom:12px}
+    .notes-actions{display:flex;gap:10px;align-items:center;justify-content:flex-end;margin-top:10px}
 
-    .meta {
-      color: var(--muted);
-      font-size: 14px;
-      margin-top: 4px;
+    @media(min-width:760px){
+      main{padding-left:24px;padding-right:24px}
+      .content-grid{grid-template-columns:minmax(0,1.45fr) minmax(280px,.8fr)}
+      .progress-grid{grid-template-columns:1fr 1fr}
     }
-
-    .tab-box {
-      overflow-x: auto;
-      background:
-        repeating-linear-gradient(0deg, rgba(255,255,255,0.022) 0px, rgba(255,255,255,0.022) 1px, transparent 1px, transparent 5px),
-        repeating-linear-gradient(90deg, rgba(140,29,24,0.035) 0px, rgba(140,29,24,0.035) 1px, transparent 1px, transparent 14px),
-        #101418;
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      padding: 14px;
-      box-shadow: inset 0 0 24px rgba(0,0,0,0.45);
-    }
-
-    pre {
-      margin: 0;
-      font-family: "Courier New", monospace;
-      font-size: 15px;
-      line-height: 1.55;
-      white-space: pre;
-      letter-spacing: 0;
-    }
-
-    .progress-grid {
-      display: grid;
-      gap: 10px;
-    }
-
-    textarea {
-      width: 100%;
-      min-height: 90px;
-      border-radius: 12px;
-      border: 1px solid var(--line);
-      background: #101418;
-      color: var(--text);
-      padding: 12px;
-      font-size: 16px;
-    }
-
-    .top-nav {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      background: #07090B;
-      border-bottom: 1px solid var(--line);
-      display: flex;
-      gap: 10px;
-      justify-content: center;
-      align-items: center;
-      padding: 12px 16px;
-      z-index: 10;
-    }
-
-    .top-nav button {
-      min-width: 90px;
-    }
-
-    .bottom-nav {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      min-height: var(--bottom-height);
-      background: #07090B;
-      border-top: 1px solid var(--line);
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 10px;
-      justify-items: center;
-      align-items: center;
-      padding: 10px 16px;
-      z-index: 10;
-    }
-
-    
-
-    @media (min-width: 720px) {
-      main { padding-left: 24px; padding-right: 24px; }
-      .progress-grid { grid-template-columns: 1fr 1fr; }
+    @media(max-width:560px){
+      :root{--bottom-height:160px}
+      .metronome-bottom{grid-template-columns:44px 78px 44px 1fr}
+      #metroToggle{grid-column:1/-1;width:100%}
+      h1{font-size:42px}
+      .hero{padding:18px;min-height:210px}
     }
   </style>
 </head>
 <body>
   <header class="top-nav">
-    <button id="backBtn">←</button>
-    <button id="homeBtn">Home</button>
-    <button id="nextBtn">Next →</button>
+    <button class="icon" id="backBtn" aria-label="Previous">&lt;</button>
+    <button class="brand ghost" id="homeBtn" aria-label="Home">Shred<span>masster</span></button>
+    <button class="icon" id="nextBtn" aria-label="Next">&gt;</button>
   </header>
-
   <main id="app"></main>
-
   <footer class="bottom-nav">
-
     <div class="metronome-bottom">
-      <button id="bpmDown">−</button>
-      <input id="bpmInput" type="number" min="0" max="240" step="5" value="80" />
-      <button id="bpmUp">+</button>
-      <input id="bpmSlider" type="range" min="0" max="240" step="5" value="80" />
-      <button id="metroToggle">Start</button>
+      <button class="icon" id="bpmDown" aria-label="Decrease BPM">−</button>
+      <input id="bpmInput" aria-label="BPM" type="number" min="0" max="240" step="5" value="80"/>
+      <button class="icon" id="bpmUp" aria-label="Increase BPM">+</button>
+      <input id="bpmSlider" aria-label="BPM slider" type="range" min="0" max="240" step="5" value="80"/>
+      <button class="primary" id="metroToggle">Start</button>
     </div>
   </footer>
 
-  <script>
-    const lessons = [
-      {
-        id: "S1",
-        title: "Scales",
-        category: "Foundation",
-        targetBpm: 80,
-        pages: [
-          {
-            heading: "Scale Systems",
-            body: "Major, Harmonic Minor, Melodic Minor, Whole Tone, Diminished and modal systems.",
-            tab: `Major
-Harmonic Minor
-Melodic Minor
-Whole Tone
-Diminished
-
-Modes:
-Ionian
-Dorian
-Phrygian
-Lydian
-Mixolydian
-Aeolian
-Locrian`
-          },
-          {
-            heading: "Advanced Modes",
-            body: "Extended modal colors and altered systems.",
-            tab: `Aug Ionian
-Dorian #11
-Phrygian nat 6
-Phrygian Dom
-Lydian #5
-Lydian #9
-Mixolydian #11
-Mixolydian b13
-Ultralocrian
-Locrian nat 9
-Locrian nat 6
-Altered Scale`
-          }
-        ]
-      },
-      {
-        id: "A1",
-        title: "Arpeggios",
-        category: "Arpeggio System",
-        targetBpm: 75,
-        pages: [
-          {
-            heading: "Arpeggios + Full Range",
-            body: "Single octave, two octave and full range arpeggio studies.",
-            tab: `Arpeggios
-Full Range Arp
-Arp Intervals
-Arp Sequences
-2 Oct Arpeggios
-Arp Tensions`
-          }
-        ]
-      },
-      {
-        id: "D2",
-        title: "Drop 2",
-        category: "Harmony",
-        targetBpm: 65,
-        pages: [
-          {
-            heading: "Drop 2 System",
-            body: "Drop 2 on string sets with tensions and harmonisation.",
-            tab: `Drop 2
-Drop 2 on String
-Drop 2 Tensions
-Scale Harmonisation
-3 String Voicing`
-          }
-        ]
-      },
-      {
-        id: "D3",
-        title: "Drop 3",
-        category: "Harmony",
-        targetBpm: 65,
-        pages: [
-          {
-            heading: "Drop 3 System",
-            body: "Drop 3 voicings with tensions and string-set application.",
-            tab: `Drop 3
-Drop 3 on String
-Drop 3 Tensions`
-          }
-        ]
-      },
-      {
-        id: "T1",
-        title: "Technique",
-        category: "Picking + Mechanics",
-        targetBpm: 90,
-        pages: [
-          {
-            heading: "Technique Blocks",
-            body: "Mechanical picking and articulation systems.",
-            tab: `Alternate
-Economy
-Economy
-Hybrid
-Hybrid
-Hybrid Divided
-Hybrid Divided
-Slap
-Tapping
-B. Frisell Tech
-Notes in Grip`
-          }
-        ]
-      },
-      {
-        id: "C1",
-        title: "Chordal + Linear Blocks",
-        category: "Application",
-        targetBpm: 60,
-        pages: [
-          {
-            heading: "Blocks + Progressions",
-            body: "Chordal blocks, linear blocks and progression studies.",
-            tab: `Chordal Blocks
-Linear Blocks
-Progressions
-
-I-III-IV-V
-I-III-II-V
-I-VI-II-V
-III-VI-II-V
-I-IV-VII-III-VI-II-V
-II-V-I-VI
-Imaj-I7-IVm-bVII
-I-VIIhalfdim-III7-VIm`
-          }
-        ]
-      },
-      {
-        id: "H1",
-        title: "Harmony Map",
-        category: "Intervals + Voicings",
-        targetBpm: 60,
-        pages: [
-          {
-            heading: "Study Order",
-            body: "Structured harmonic path from intervals to seventh chords and sequences.",
-            tab: `1 Intervals
-2 Triads (3rds and 4ths) + inversions
-3 Close Voicing
-4 Drop2 + tensions
-5 Drop3 + tensions
-6 Suspended chords
-7 Quartal chords
-8 Scale
-9 Intervals
-10 Triads
-11 Seventh chords
-12 Sequences 3,4,5
-13 Arpeggios
-13 Two Octave Arpeggios
-14 Arp Tensions`
-          }
-        ]
-      },
-      {
-        id: "CH1",
-        title: "Chord Quality Reference",
-        category: "Chord Formula",
-        targetBpm: 50,
-        pages: [
-          {
-            heading: "Chord Tensions",
-            body: "Reference map for tensions and chord qualities.",
-            tab: `Maj7 / Min7 / MinMaj7 / HalfDim / Dim / MajAug / Dom7 / Dom7sus / Dom7aug
-
-Extensions:
-b9  9  #9
-b3  3
-b11 11 #11
-b5  5  #5
-b13 13
-bb7 b7 7
-sus  Maj7`
-          }
-        ]
+<script>
+const dropQualities={
+  root:[["Maj7","1 5 7 3"],["Min7","1 5 b7 b3"],["Dom7","1 5 b7 3"],["HalfDim","1 b5 b7 b3"]],
+  first:[["Maj7","3 7 1 5"],["Min7","b3 b7 1 5"],["Dom7","3 b7 1 5"],["HalfDim","b3 b7 1 b5"]],
+  second:[["Maj7","5 1 3 7"],["Min7","5 1 b3 b7"],["Dom7","5 1 3 b7"],["HalfDim","b5 1 b3 b7"]],
+  third:[["Maj7","7 3 5 1"],["Min7","b7 b3 5 1"],["Dom7","b7 3 5 1"],["HalfDim","b7 b3 b5 1"]]
+};
+function makeDropPages(type,inversion,cards){
+  return [
+    {heading:`${inversion} - Shape First`,body:"Learn the grip shape first. Static control before movement.",cards:cards.map(c=>[c[0],c[1],"main shape"])},
+    {heading:`${inversion} - Diatonically`,body:"Run the same shape through the key: I ii iii IV V vi vii°.",cards:[["Key of G","Gmaj7 -> Am7 -> Bm7 -> Cmaj7 -> D7 -> Em7 -> F#m7b5","full harmonisation"]]},
+    {heading:`${inversion} - II-V-I`,body:"Apply the same shape to real harmonic movement.",cards:[["Major II-V-I","Am7 -> D7 -> Gmaj7","essential"],["Minor II-V-I","Bm7b5 -> E7 -> AmMaj7","advanced"]]}
+  ];
+}
+const majorModeShapes=[
+  {mode:"Aeolian",root:"E",shapeIndex:5},
+  {mode:"Locrian",root:"F#",shapeIndex:6},
+  {mode:"Ionian",root:"G",shapeIndex:0},
+  {mode:"Dorian",root:"A",shapeIndex:1},
+  {mode:"Phrygian",root:"B",shapeIndex:2},
+  {mode:"Lydian",root:"C",shapeIndex:3},
+  {mode:"Mixolydian",root:"D",shapeIndex:4}
+];
+const pitchNames=["C","Db","D","Eb","E","F","Gb","G","Ab","A","Bb","B"];
+const stringPitch={1:4,2:11,3:7,4:2,5:9,6:4};
+const scaleRootG=7;
+const scaleIntervals={
+  harmonicMinor:[0,2,3,5,7,8,11],
+  melodicMinor:[0,2,3,5,7,9,11],
+  wholeTone:[0,2,4,6,8,10],
+  halfWholeDiminished:[0,1,3,4,6,7,9,10],
+  wholeHalfDiminished:[0,2,3,5,6,8,9,11]
+};
+function makeScaleShape(name,startFret,rootPc,intervals){
+  const pitchSet=new Set(intervals.map(interval=>(rootPc+interval)%12));
+  const notes=[];
+  for(let s=6;s>=1;s--){
+    let stringNotes=0;
+    for(let f=startFret;f<startFret+7;f++){
+      const pc=(stringPitch[s]+f)%12;
+      if(pitchSet.has(pc)){
+        notes.push({s,f,n:pitchNames[pc]});
+        stringNotes++;
       }
-    ];
-
-    let currentLessonIndex = null;
-    let currentPageIndex = 0;
-    const app = document.getElementById("app");
-    const nextBtn = document.getElementById("nextBtn");
-    const backBtn = document.getElementById("backBtn");
-    const homeBtn = document.getElementById("homeBtn");
-    const bpmInput = document.getElementById("bpmInput");
-    const bpmSlider = document.getElementById("bpmSlider");
-    const metroToggle = document.getElementById("metroToggle");
-    const bpmDown = document.getElementById("bpmDown");
-    const bpmUp = document.getElementById("bpmUp");
-    let audioContext = null;
-    let wakeLock = null;
-    let timerId = null;
-    let isPlaying = false;
-
-    async function requestWakeLock() {
-      try {
-        if ("wakeLock" in navigator) {
-          wakeLock = await navigator.wakeLock.request("screen");
-          wakeLock.addEventListener("release", () => {
-            console.log("Wake lock released");
-          });
-        }
-      } catch (err) {
-        console.log("Wake lock not supported:", err);
-      }
+      if(stringNotes===3)break;
     }
+  }
+  return {name:`${name} - 3NPS`,startFret,root:pitchNames[rootPc],notes};
+}
+function makeScaleBoards(labels,startFrets,rootPc,intervals){
+  return labels.map((label,index)=>({
+    mode:label,
+    shape:makeScaleShape(label,startFrets[index],rootPc,intervals)
+  }));
+}
+const harmonicMinorShapes=makeScaleBoards(
+  ["Harmonic Minor","Locrian Natural 6","Ionian Augmented","Dorian Sharp 4","Phrygian Dominant","Lydian Sharp 2","Altered Diminished"],
+  [3,5,6,8,10,11,14],
+  scaleRootG,
+  scaleIntervals.harmonicMinor
+);
+const melodicMinorShapes=makeScaleBoards(
+  ["Melodic Minor","Dorian Flat 2","Lydian Augmented","Lydian Dominant","Mixolydian Flat 6","Locrian Natural 2","Altered"],
+  [3,5,6,8,10,12,14],
+  scaleRootG,
+  scaleIntervals.melodicMinor
+);
+const wholeToneShapes=[
+  {mode:"G Whole Tone",shape:makeScaleShape("G Whole Tone",3,7,scaleIntervals.wholeTone)},
+  {mode:"Ab Whole Tone",shape:makeScaleShape("Ab Whole Tone",4,8,scaleIntervals.wholeTone)}
+];
+const diminishedShapes=[
+  {mode:"G Half-Whole Diminished",shape:makeScaleShape("G Half-Whole",3,7,scaleIntervals.halfWholeDiminished)},
+  {mode:"G Whole-Half Diminished",shape:makeScaleShape("G Whole-Half",3,7,scaleIntervals.wholeHalfDiminished)}
+];
+function makeScaleLesson(id,title,modes=majorModeShapes,shapeHeading="Scale Shapes"){
+  return {id:String(id),title,category:"Scales",targetBpm:80,visualType:"scalar",pages:[{
+    heading:title,
+    body:"Fingerings, sequences, and interval work in one place.",
+    modes,
+    shapeHeading,
+    sequences:[
+      {heading:"Sequences in 3",formula:"123 . 234 . 345 . 456",degrees:["1","2","3"]},
+      {heading:"Sequences in 4",formula:"1234 . 2345 . 3456 . 4567",degrees:["1","2","3","4"]},
+      {heading:"Sequences in 5",formula:"12345 . 23456 . 34567",degrees:["1","2","3","4","5"]},
+      {heading:"Sequences in 6",formula:"123456 . 234567",degrees:["1","2","3","4","5","6"]}
+    ],
+    intervals:[
+      {heading:"Thirds",formula:"1-3 . 2-4 . 3-5 . 4-6 . 5-7 . 6-1 . 7-2",degrees:["1","3"]},
+      {heading:"Fourths",formula:"1-4 . 2-5 . 3-6 . 4-7 . 5-1 . 6-2 . 7-3",degrees:["1","4"]},
+      {heading:"Fifths",formula:"1-5 . 2-6 . 3-7 . 4-1 . 5-2 . 6-3 . 7-4",degrees:["1","5"]},
+      {heading:"Sixths",formula:"1-6 . 2-7 . 3-1 . 4-2 . 5-3 . 6-4 . 7-5",degrees:["1","6"]}
+    ]
+  }]};
+}
 
-    document.addEventListener("visibilitychange", async () => {
-      if (wakeLock !== null && document.visibilityState === "visible") {
-        await requestWakeLock();
-      }
-    });
+const lessons=[
+  makeScaleLesson(1,"Modes of Major Scale",majorModeShapes,"Modes"),
+  makeScaleLesson(2,"Harmonic Minor Scale",harmonicMinorShapes,"3 Notes Per String"),
+  makeScaleLesson(3,"Melodic Minor Scale",melodicMinorShapes,"3 Notes Per String"),
+  makeScaleLesson(4,"Whole Tone Scale",wholeToneShapes,"3 Notes Per String"),
+  makeScaleLesson(5,"Diminished Scale",diminishedShapes,"3 Notes Per String"),
+  {id:"6",title:"Triads in Position",category:"Triads",targetBpm:65,visualType:"chordGrid",pages:[{heading:"Diatonic Triads in G",body:"Stay in one position and harmonise the scale.",cards:[["G","G B D","I . Major"],["Am","A C E","ii . Minor"],["Bm","B D F#","iii . Minor"],["C","C E G","IV . Major"],["D","D F# A","V . Major"],["Em","E G B","vi . Minor"],["F#dim","F# A C","vii°"]]},{heading:"Triad Inversions",body:"Root, first inversion, second inversion.",cards:[["Root","1 3 5","stable"],["1st Inv","3 5 1","smooth bass"],["2nd Inv","5 1 3","open sound"]]}]},
+  {id:"7",title:"Triads on String Sets",category:"Triads",targetBpm:65,visualType:"stringSets",pages:[{heading:"Top String Set",body:"Triads on strings 1-2-3.",cards:[["Set 1","e B G","lead voicings"],["Inversions","R . 1st . 2nd","horizontal movement"]]},{heading:"Middle String Set",body:"Triads on strings 2-3-4.",cards:[["Set 2","B G D","compact grips"]]},{heading:"Lower Middle String Set",body:"Triads on strings 3-4-5.",cards:[["Set 3","G D A","rhythm voicings"]]},{heading:"Low String Set",body:"Triads on strings 4-5-6.",cards:[["Set 4","D A E","heavy low grips"]]}]},
+  {id:"8",title:"Drop 2",category:"Voicings",targetBpm:60,visualType:"voicing",pages:makeDropPages("Drop 2","Root Position",dropQualities.root)},
+  {id:"9",title:"Drop 2 - 1st Inversion",category:"Voicings",targetBpm:60,visualType:"voicing",pages:makeDropPages("Drop 2","1st Inversion",dropQualities.first)},
+  {id:"10",title:"Drop 2 - 2nd Inversion",category:"Voicings",targetBpm:60,visualType:"voicing",pages:makeDropPages("Drop 2","2nd Inversion",dropQualities.second)},
+  {id:"11",title:"Drop 2 - 3rd Inversion",category:"Voicings",targetBpm:60,visualType:"voicing",pages:makeDropPages("Drop 2","3rd Inversion",dropQualities.third)},
+  {id:"12",title:"Drop 3",category:"Voicings",targetBpm:60,visualType:"voicing",pages:makeDropPages("Drop 3","Root Position",[["Maj7","1 7 3 5"],["Min7","1 b7 b3 5"],["Dom7","1 b7 3 5"],["HalfDim","1 b7 b3 b5"]])},
+  {id:"13",title:"Drop 3 - 1st Inversion",category:"Voicings",targetBpm:60,visualType:"voicing",pages:makeDropPages("Drop 3","1st Inversion",[["Maj7","3 1 5 7"],["Min7","b3 1 5 b7"],["Dom7","3 1 5 b7"],["HalfDim","b3 1 b5 b7"]])},
+  {id:"14",title:"Drop 3 - 2nd Inversion",category:"Voicings",targetBpm:60,visualType:"voicing",pages:makeDropPages("Drop 3","2nd Inversion",[["Maj7","5 3 7 1"],["Min7","5 b3 b7 1"],["Dom7","5 3 b7 1"],["HalfDim","b5 b3 b7 1"]])},
+  {id:"15",title:"Drop 3 - 3rd Inversion",category:"Voicings",targetBpm:60,visualType:"voicing",pages:makeDropPages("Drop 3","3rd Inversion",[["Maj7","7 5 1 3"],["Min7","b7 5 1 b3"],["Dom7","b7 5 1 3"],["HalfDim","b7 b5 1 b3"]])},
+  {id:"16",title:"Arpeggios - All",category:"Arpeggios",targetBpm:70,visualType:"arpeggio",pages:[{heading:"Triad Arpeggios",body:"Core triad qualities.",cards:[["Major","1 3 5","G B D"],["Minor","1 b3 5","A C E"],["Dim","1 b3 b5","F# A C"],["Aug","1 3 #5","G B D#"]]},{heading:"Seventh Arpeggios",body:"Core seventh chord qualities.",cards:[["Maj7","1 3 5 7","G B D F#"],["Min7","1 b3 5 b7","A C E G"],["Dom7","1 3 5 b7","D F# A C"],["HalfDim","1 b3 b5 b7","F# A C E"],["Dim7","1 b3 b5 bb7","F# A C Eb"]]}]},
+  {id:"17",title:"Suspended Chords",category:"Chords",targetBpm:60,visualType:"chordGrid",pages:[{heading:"Suspended Chord Types",body:"Replace the 3rd with 2 or 4.",cards:[["Sus2","1 2 5","open"],["Sus4","1 4 5","classic"],["7sus4","1 4 5 b7","dominant sus"],["9sus","1 4 5 b7 9","fusion"]]}]},
+  {id:"18",title:"Quartal Chords",category:"Modern Voicings",targetBpm:60,visualType:"chordGrid",pages:[{heading:"Quartal Structures",body:"Fourth-based harmony.",cards:[["Perfect 4ths","1 4 b7","stacked fourths"],["Mixed 4ths","1 4 7","lydian brightness"],["Tritone Color","1 #4 7","horror tension"],["Low Quartal","5 1 4","heavy riff grip"]]}]}
+];
 
-    function getProgress() {
-      return JSON.parse(localStorage.getItem("guitarPracticeProgress") || "{}");
-    }
-    function saveProgress(progress) {
-      localStorage.setItem("guitarPracticeProgress", JSON.stringify(progress));
-    }
-    function getGlobalBpm() {
-      return Number(localStorage.getItem("globalMetronomeBpm") || 80);
-    }
+const shapeTabs=[
+`e|------------------------------5-7-8-|
+B|------------------------5-7-8-------|
+G|------------------4-5-7-------------|
+D|------------4-5-7-------------------|
+A|------3-5-7-------------------------|
+E|-3-5-7------------------------------|`,
+`e|-------------------------------7-8-10-|
+B|------------------------7-8-10--------|
+G|------------------5-7-9---------------|
+D|------------5-7-9---------------------|
+A|------5-7-9---------------------------|
+E|-5-7-8-------------------------------|`,
+`e|-------------------------------8-10-12-|
+B|------------------------8-10-12--------|
+G|------------------7-9-11---------------|
+D|------------7-9-10---------------------|
+A|------7-9-10---------------------------|
+E|-7-8-10-------------------------------|`
+];
 
-    function setGlobalBpm(value) {
-      localStorage.setItem("globalMetronomeBpm", String(value));
-    }
+const modeShapes3Nps=[
+  {name:"Shape 1",startFret:3,root:"G",pattern:[[6,3,"G"],[6,5,"A"],[6,7,"B"],[5,3,"C"],[5,5,"D"],[5,7,"E"],[4,4,"F#"],[4,5,"G"],[4,7,"A"],[3,4,"B"],[3,5,"C"],[3,7,"D"],[2,5,"E"],[2,7,"F#"],[2,8,"G"],[1,5,"A"],[1,7,"B"],[1,8,"C"]],tab:shapeTabs[0]},
+  {name:"Shape 2",startFret:5,root:"A",pattern:[[6,5,"A"],[6,7,"B"],[6,8,"C"],[5,5,"D"],[5,7,"E"],[5,9,"F#"],[4,5,"G"],[4,7,"A"],[4,9,"B"],[3,5,"C"],[3,7,"D"],[3,9,"E"],[2,7,"F#"],[2,8,"G"],[2,10,"A"],[1,7,"B"],[1,8,"C"],[1,10,"D"]],tab:shapeTabs[1]},
+  {name:"Shape 3",startFret:7,root:"B",pattern:[[6,7,"B"],[6,8,"C"],[6,10,"D"],[5,7,"E"],[5,9,"F#"],[5,10,"G"],[4,7,"A"],[4,9,"B"],[4,10,"C"],[3,7,"D"],[3,9,"E"],[3,11,"F#"],[2,8,"G"],[2,10,"A"],[2,12,"B"],[1,8,"C"],[1,10,"D"],[1,12,"E"]],tab:shapeTabs[2]},
+  {name:"Shape 4",startFret:8,root:"C",pattern:[[6,8,"C"],[6,10,"D"],[6,12,"E"],[5,9,"F#"],[5,10,"G"],[5,12,"A"],[4,9,"B"],[4,10,"C"],[4,12,"D"],[3,9,"E"],[3,11,"F#"],[3,12,"G"],[2,10,"A"],[2,12,"B"],[2,13,"C"],[1,10,"D"],[1,12,"E"],[1,14,"F#"]],tab:shapeTabs[2]},
+  {name:"Shape 5",startFret:10,root:"D",pattern:[[6,10,"D"],[6,12,"E"],[6,14,"F#"],[5,10,"G"],[5,12,"A"],[5,14,"B"],[4,10,"C"],[4,12,"D"],[4,14,"E"],[3,11,"F#"],[3,12,"G"],[3,14,"A"],[2,12,"B"],[2,13,"C"],[2,15,"D"],[1,12,"E"],[1,14,"F#"],[1,15,"G"]],tab:shapeTabs[2]},
+  {name:"Shape 6",startFret:12,root:"E",pattern:[[6,12,"E"],[6,14,"F#"],[6,15,"G"],[5,12,"A"],[5,14,"B"],[5,15,"C"],[4,12,"D"],[4,14,"E"],[4,16,"F#"],[3,12,"G"],[3,14,"A"],[3,16,"B"],[2,13,"C"],[2,15,"D"],[2,17,"E"],[1,14,"F#"],[1,15,"G"],[1,17,"A"]],tab:shapeTabs[2]},
+  {name:"Shape 7",startFret:14,root:"F#",pattern:[[6,14,"F#"],[6,15,"G"],[6,17,"A"],[5,14,"B"],[5,15,"C"],[5,17,"D"],[4,14,"E"],[4,16,"F#"],[4,17,"G"],[3,14,"A"],[3,16,"B"],[3,17,"C"],[2,15,"D"],[2,17,"E"],[2,19,"F#"],[1,15,"G"],[1,17,"A"],[1,19,"B"]],tab:shapeTabs[2]}
+].map(shape=>({...shape,notes:shape.pattern.map(([s,f,n])=>({s,f,n}))}));
 
-    function syncBpm(value) {
-      let bpm = Math.max(0, Math.min(240, Number(value) || 0));
-      bpm = Math.round(bpm / 5) * 5;
-      bpmInput.value = bpm;
-      bpmSlider.value = bpm;
-      setGlobalBpm(bpm);
-      if (currentLessonIndex !== null) {
-        const lesson = lessons[currentLessonIndex];
-        const progress = getProgress();
-        progress[lesson.id] = progress[lesson.id] || {};
-        progress[lesson.id].lastBpm = bpm;
-        saveProgress(progress);
-      }
-      if (isPlaying) {
-        stopMetronome();
-        if (bpm > 0) {
-          startMetronome();
-        }
-      }
-    }
-    bpmInput.addEventListener("focus", () => {
-      if (isPlaying) stopMetronome();
-    });
+let currentLessonIndex=null,currentPageIndex=0,currentShapeIndex=0,audioContext=null,wakeLock=null,timerId=null,isPlaying=false;
+const app=document.getElementById("app"),nextBtn=document.getElementById("nextBtn"),backBtn=document.getElementById("backBtn"),homeBtn=document.getElementById("homeBtn"),bpmInput=document.getElementById("bpmInput"),bpmSlider=document.getElementById("bpmSlider"),metroToggle=document.getElementById("metroToggle"),bpmDown=document.getElementById("bpmDown"),bpmUp=document.getElementById("bpmUp");
 
-    bpmInput.addEventListener("input", e => syncBpm(e.target.value));
+const html=s=>String(s).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]));
+function getProgress(){return JSON.parse(localStorage.getItem("guitarPracticeProgress")||"{}")}
+function saveProgress(p){localStorage.setItem("guitarPracticeProgress",JSON.stringify(p))}
+function getGlobalBpm(){return Number(localStorage.getItem("globalMetronomeBpm")||80)}
+function setGlobalBpm(v){localStorage.setItem("globalMetronomeBpm",String(v))}
 
-    bpmInput.addEventListener("blur", async () => {
-      if (Number(bpmInput.value) > 0) {
-        await startMetronome();
-      }
-    });
-    bpmSlider.addEventListener("pointerdown", () => {
-      if (isPlaying) stopMetronome();
-    });
+async function requestWakeLock(){try{if("wakeLock"in navigator)wakeLock=await navigator.wakeLock.request("screen")}catch(e){}}
+document.addEventListener("visibilitychange",async()=>{if(wakeLock&&document.visibilityState==="visible")await requestWakeLock()});
 
-    bpmSlider.addEventListener("touchstart", () => {
-      if (isPlaying) stopMetronome();
-    });
+function syncBpm(value){
+  let bpm=Math.max(0,Math.min(240,Number(value)||0));
+  bpm=Math.round(bpm/5)*5;
+  bpmInput.value=bpm;
+  bpmSlider.value=bpm;
+  setGlobalBpm(bpm);
+  if(currentLessonIndex!==null){
+    const lesson=lessons[currentLessonIndex],p=getProgress();
+    p[lesson.id]=p[lesson.id]||{};
+    p[lesson.id].lastBpm=bpm;
+    saveProgress(p);
+  }
+  if(isPlaying){stopMetronome();if(bpm>0)startMetronome()}
+}
+function clickSound(accent=false){
+  if(!audioContext)return;
+  const osc=audioContext.createOscillator(),gain=audioContext.createGain();
+  osc.type="square";
+  osc.frequency.value=accent?1400:940;
+  gain.gain.setValueAtTime(.001,audioContext.currentTime);
+  gain.gain.linearRampToValueAtTime(.32,audioContext.currentTime+.003);
+  gain.gain.exponentialRampToValueAtTime(.001,audioContext.currentTime+.05);
+  osc.connect(gain);
+  gain.connect(audioContext.destination);
+  osc.start();
+  osc.stop(audioContext.currentTime+.06);
+}
+async function startMetronome(){
+  const AudioCtx=window.AudioContext||window.webkitAudioContext;
+  audioContext=audioContext||new AudioCtx();
+  if(audioContext.state==="suspended")await audioContext.resume();
+  const bpmValue=Number(bpmInput.value);
+  if(bpmValue<=0){stopMetronome();return}
+  isPlaying=true;
+  metroToggle.textContent="Stop";
+  let beat=0;
+  clickSound(true);
+  clearInterval(timerId);
+  timerId=setInterval(()=>{beat=(beat+1)%4;clickSound(beat===0)},60000/bpmValue);
+}
+function stopMetronome(){isPlaying=false;metroToggle.textContent="Start";clearInterval(timerId);timerId=null}
 
-    bpmSlider.addEventListener("input", e => syncBpm(e.target.value));
+function renderHome(){
+  currentLessonIndex=null;
+  currentPageIndex=0;
+  const p=getProgress();
+  const completed=lessons.filter(lesson=>p[lesson.id]?.completed).length;
+  app.innerHTML=`<section class="hero">
+    <div class="meta">${completed} of ${lessons.length} lessons completed</div>
+    <h1>Shredmasster</h1>
+    <p class="subtle">Precision, tension, and beautiful mistakes. Train slow. Play brutal.</p>
+  </section>
+  <section class="lesson-grid">${lessons.map((lesson,index)=>{
+    const saved=p[lesson.id]||{},done=saved.completed,best=saved.bestBpm?`Best ${saved.bestBpm} BPM`:`Target ${lesson.targetBpm} BPM`;
+    return `<button class="lesson-button" onclick="openLesson(${index},0)">
+      <div class="lesson-top"><span class="lesson-id">${lesson.id}</span><span class="status ${done?'done':''}">${done?'Complete':'Open'}</span></div>
+      <div class="lesson-title">${html(lesson.title)}</div>
+      <div class="meta">${html(lesson.category)} - ${best}</div>
+    </button>`;
+  }).join("")}</section>`;
+}
+function openLesson(i,page=0){
+  currentLessonIndex=i;
+  currentPageIndex=page;
+  const lesson=lessons[i],saved=(getProgress()[lesson.id]||{});
+  syncBpm(saved.lastBpm||getGlobalBpm()||lesson.targetBpm);
+  renderLesson();
+}
+function renderFretboard(shape){
+  const width=760,height=250,left=58,top=34,stringGap=30,fretGap=58,fretsShown=7,start=shape.startFret;
+  const fretLines=Array.from({length:fretsShown+1},(_,i)=>`<line x1="${left+i*fretGap}" y1="${top}" x2="${left+i*fretGap}" y2="${top+stringGap*5}" stroke="#58636A" stroke-width="${i===0?3:1}"/>`).join("");
+  const stringLines=[1,2,3,4,5,6].map((s,i)=>`<line x1="${left}" y1="${top+i*stringGap}" x2="732" y2="${top+i*stringGap}" stroke="#748087" stroke-width="${1+i*.25}"/>`).join("");
+  const fretNumbers="";
+  const dots=shape.notes.map(note=>{
+    const x=left+(note.f-start)*fretGap+fretGap/2,y=top+(note.s-1)*stringGap;
+    return `<g><circle cx="${x}" cy="${y}" r="14" fill="#edf2f3" stroke="#090d10" stroke-width="2"/></g>`;
+  }).join("");
+  const labels=["e","B","G","D","A","E"].map((l,i)=>`<text x="22" y="${top+i*stringGap+4}" fill="#98a6ac" font-size="13">${l}</text>`).join("");
+  return `<svg width="${width}" height="${height}" viewBox="0 0 ${width} ${height}" role="img" aria-label="Fretboard diagram">${fretNumbers}${labels}${stringLines}${fretLines}${dots}</svg>`;
+}
+function renderDegreeStrip(degrees=[]){return `<div class="degree-strip">${degrees.map(d=>`<span class="degree">${html(d)}</span>`).join("")}</div>`}
+function renderCards(cards=[]){return `<div class="visual-grid">${cards.map(c=>`<div class="visual-card"><strong>${html(c[0])}</strong><div class="formula-line">${html(c[1])}</div><div class="meta">${html(c[2]||"")}</div></div>`).join("")}</div>`}
+function renderScalarLesson(page){
+  return `<div class="scalar-stack">
+    <section class="card">
+      <h3>${html(page.shapeHeading||"Scale Shapes")}</h3>
+      <div class="scale-board-list">${page.modes.map(mode=>{
+        const shape=mode.shape||modeShapes3Nps[mode.shapeIndex];
+        const root=mode.root||shape.root||mode.mode.split(" ")[0];
+        return `<div class="scale-board">
+        <div class="scale-board-title"><strong>${html(mode.mode)}</strong>${mode.mode===shape.name?"":`<span>${html(shape.name)}</span>`}</div>
+        <div class="fretboard-wrap">${renderFretboard(shape,root,false)}</div>
+      </div>`;
+      }).join("")}</div>
+    </section>
+    <section class="card">
+      <h3>Sequences</h3>
+      <div class="compact-list">${page.sequences.map(sequence=>`<div class="compact-row">
+        <div><strong>${html(sequence.heading)}</strong>${renderDegreeStrip(sequence.degrees)}</div>
+        <div class="formula-line">${html(sequence.formula)}</div>
+      </div>`).join("")}</div>
+    </section>
+    <section class="card">
+      <h3>Intervals</h3>
+      <div class="compact-list">${page.intervals.map(interval=>`<div class="compact-row">
+        <div><strong>${html(interval.heading)}</strong>${renderDegreeStrip(interval.degrees)}</div>
+        <div class="formula-line">${html(interval.formula)}</div>
+      </div>`).join("")}</div>
+    </section>
+  </div>`;
+}
+function renderVisualLesson(page,type){
+  if(type==="sequence"||type==="interval")return `<section class="card"><h3>${type==="sequence"?"Pattern":"Interval Map"}</h3>${renderDegreeStrip(page.degrees||[])}<div class="tab-box" style="margin-top:12px"><pre>${html(page.formula||"")}</pre></div></section>`;
+  if(["chordGrid","stringSets","voicing","arpeggio"].includes(type))return `<section class="card"><h3>${type==="voicing"?"Voicing Blocks":type==="arpeggio"?"Arpeggio Blocks":"Diagram Blocks"}</h3>${renderCards(page.cards||[])}</section>`;
+  return `<section class="card"><h3>Lesson Material</h3><div class="tab-box"><pre>${html(page.tab||"")}</pre></div></section>`;
+}
+function renderProgressBlock(saved){
+  return `<section class="card"><h3>Practice Notes</h3><textarea id="lessonNotes" placeholder="Practice notes...">${html(saved.notes||"")}</textarea><div class="notes-actions"><button onclick="saveNotes()">Save Notes</button></div></section>`;
+}
+function renderLesson(){
+  const lesson=lessons[currentLessonIndex],page=lesson.pages[currentPageIndex],saved=(getProgress()[lesson.id]||{});
+  if(lesson.visualType==="scalar"){
+    app.innerHTML=`<section class="card"><div class="meta">Lesson ${lesson.id} - ${html(lesson.category)}</div><h1>${html(lesson.title)}</h1><p>${html(page.body)}</p></section><div class="content-grid"><div>${renderScalarLesson(page)}</div><div>${renderProgressBlock(saved)}</div></div>`;
+    return;
+  }
+  if(lesson.visualType==="mode3nps"){
+    currentShapeIndex=page.shapeIndex;
+    const shape=modeShapes3Nps[currentShapeIndex];
+    app.innerHTML=`<section class="card toolbar"><div><div class="meta">Lesson ${lesson.id} - ${html(lesson.category)} - Page ${currentPageIndex+1} of ${lesson.pages.length}</div><h1>${html(page.mode)}</h1><div class="pill-row"><span class="pill">Formula: ${html(page.formula)}</span><span class="pill">Character: ${html(page.character)}</span><span class="pill">Sound: ${html(page.sound)}</span></div></div></section>
+    <div class="content-grid"><div><section class="card"><h3>3 Notes Per String</h3><div class="fretboard-controls"><button class="icon" onclick="previousShape()">&lt;</button><strong class="shape-title">${html(shape.name)} - Fret ${shape.startFret}</strong><button class="icon" onclick="nextShape()">&gt;</button></div><div class="fretboard-wrap">${renderFretboard(shape,page.root,false)}</div></section><section class="card"><h3>Tab</h3><div class="tab-box"><pre>${html(shape.tab)}</pre></div></section></div><div>${renderProgressBlock(saved)}</div></div>`;
+    return;
+  }
+  app.innerHTML=`<section class="card"><div class="meta">Lesson ${lesson.id} - ${html(lesson.category)} - Page ${currentPageIndex+1} of ${lesson.pages.length}</div><h1>${html(lesson.title)}</h1><h2>${html(page.heading)}</h2><p>${html(page.body)}</p><div class="pill-row">${page.formula?`<span class="pill">${html(page.formula)}</span>`:""}${page.interval?`<span class="pill">Interval: ${html(page.interval)}</span>`:""}</div></section><div class="content-grid"><div>${renderVisualLesson(page,lesson.visualType)}</div><div>${renderProgressBlock(saved)}</div></div>`;
+}
+function previousShape(){currentShapeIndex=(currentShapeIndex+modeShapes3Nps.length-1)%modeShapes3Nps.length;lessons[currentLessonIndex].pages[currentPageIndex].shapeIndex=currentShapeIndex;renderLesson()}
+function nextShape(){currentShapeIndex=(currentShapeIndex+1)%modeShapes3Nps.length;lessons[currentLessonIndex].pages[currentPageIndex].shapeIndex=currentShapeIndex;renderLesson()}
+function markComplete(){const lesson=lessons[currentLessonIndex],p=getProgress();p[lesson.id]=p[lesson.id]||{};p[lesson.id].completed=true;p[lesson.id].lastPracticed=new Date().toISOString().slice(0,10);saveProgress(p);renderLesson()}
+function saveBestBpm(){const lesson=lessons[currentLessonIndex],p=getProgress();p[lesson.id]=p[lesson.id]||{};p[lesson.id].bestBpm=Number(bpmInput.value);p[lesson.id].lastPracticed=new Date().toISOString().slice(0,10);saveProgress(p);renderLesson()}
+function saveNotes(){const lesson=lessons[currentLessonIndex],p=getProgress();p[lesson.id]=p[lesson.id]||{};p[lesson.id].notes=document.getElementById("lessonNotes").value;saveProgress(p);renderLesson()}
+function nextPage(){if(currentLessonIndex===null)return;const lesson=lessons[currentLessonIndex];if(currentPageIndex<lesson.pages.length-1){currentPageIndex++;renderLesson();window.scrollTo(0,0);return}if(currentLessonIndex<lessons.length-1){openLesson(currentLessonIndex+1,0);window.scrollTo(0,0);return}renderHome()}
+function previousPage(){if(currentLessonIndex===null)return;if(currentPageIndex>0){currentPageIndex--;renderLesson();window.scrollTo(0,0);return}if(currentLessonIndex>0){const prev=lessons[currentLessonIndex-1];openLesson(currentLessonIndex-1,prev.pages.length-1);window.scrollTo(0,0);return}renderHome()}
 
-    bpmSlider.addEventListener("change", async () => {
-      if (Number(bpmSlider.value) > 0) {
-        await startMetronome();
-      }
-    });
-
-    bpmDown.addEventListener("click", () => {
-      syncBpm(Number(bpmInput.value) - 5);
-    });
-
-    bpmUp.addEventListener("click", () => {
-      syncBpm(Number(bpmInput.value) + 5);
-    });
-
-    function clickSound(accent = false) {
-      if (!audioContext) return;
-
-      const osc = audioContext.createOscillator();
-      const gain = audioContext.createGain();
-
-      osc.type = "square";
-      osc.frequency.value = accent ? 1400 : 1000;
-
-      gain.gain.setValueAtTime(0.001, audioContext.currentTime);
-      gain.gain.linearRampToValueAtTime(0.35, audioContext.currentTime + 0.003);
-      gain.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.05);
-
-      osc.connect(gain);
-      gain.connect(audioContext.destination);
-
-      osc.start();
-      osc.stop(audioContext.currentTime + 0.06);
-    }
-    async function startMetronome() {
-      const AudioCtx = window.AudioContext || window.webkitAudioContext;
-      audioContext = audioContext || new AudioCtx();
-
-      if (audioContext.state === "suspended") {
-        await audioContext.resume();
-      }
-      isPlaying = true;
-      metroToggle.textContent = "Stop";
-      let beat = 0;
-      clickSound(true);
-      const bpmValue = Number(bpmInput.value);
-      if (bpmValue <= 0) {
-        stopMetronome();
-        return;
-      }
-      const interval = 60000 / bpmValue;
-      timerId = setInterval(() => {
-        beat = (beat + 1) % 4;
-        clickSound(beat === 0);
-      }, interval);
-    }
-    function stopMetronome() {
-      isPlaying = false;
-      metroToggle.textContent = "Start";
-      clearInterval(timerId);
-      timerId = null;
-    }
-    metroToggle.addEventListener("click", async () => {
-      if (isPlaying) {
-        stopMetronome();
-      } else {
-        await requestWakeLock();
-        await startMetronome();
-      }
-    });
-
-    function renderHome() {
-      currentLessonIndex = null;
-      currentPageIndex = 0;
-      const progress = getProgress();
-      app.innerHTML = `
-        <section class="card">
-          <h1>guitar demystified </h1>
-          <p class="meta">Precision, tension, and beautiful mistakes. Train slow. Play brutal.</p>
-        </section>
-        <section>
-          ${lessons.map((lesson, index) => {
-            const p = progress[lesson.id] || {};
-            const status = p.completed ? "Completed" : "Not completed";
-            const best = p.bestBpm ? `Best BPM: ${p.bestBpm}` : `Target BPM: ${lesson.targetBpm}`;
-            return `<button class="lesson-button" onclick="openLesson(${index}, 0)">
-              <span class="lesson-id">${lesson.id}</span><strong>${lesson.title}</strong>
-              <div class="meta">${lesson.category} · ${status} · ${best}</div>
-            </button>`;
-          }).join("")}
-        </section>`;
-    }
-    function openLesson(lessonIndex, pageIndex = 0) {
-      currentLessonIndex = lessonIndex;
-      currentPageIndex = pageIndex;
-      const lesson = lessons[lessonIndex];
-      const progress = getProgress();
-      const saved = progress[lesson.id] || {};
-      syncBpm(getGlobalBpm() || saved.lastBpm || lesson.targetBpm);
-      renderLesson();
-    }
-    function renderLesson() {
-      const lesson = lessons[currentLessonIndex];
-      const page = lesson.pages[currentPageIndex];
-      const progress = getProgress();
-      const saved = progress[lesson.id] || {};
-      app.innerHTML = `
-        <section class="card">
-          <div class="meta">${lesson.id} · ${lesson.category} · Page ${currentPageIndex + 1} of ${lesson.pages.length}</div>
-          <h1>${lesson.title}</h1>
-          <h2>${page.heading}</h2>
-          <p>${page.body}</p>
-        </section>
-        <section class="card">
-          <h3>Tab / Fingering</h3>
-          <div class="tab-box"><pre>${page.tab}</pre></div>
-        </section>
-        <section class="card">
-          <h3>Practice Progress</h3>
-          <div class="progress-grid">
-            <button class="primary" onclick="markComplete()">Mark Complete</button>
-            <button onclick="saveBestBpm()">Save Current BPM as Best</button>
-          </div>
-          <p class="meta">Best BPM: ${saved.bestBpm || "—"} · Completed: ${saved.completed ? "Yes" : "No"}</p>
-          <textarea id="lessonNotes" placeholder="Practice notes...">${saved.notes || ""}</textarea>
-          <button onclick="saveNotes()">Save Notes</button>
-        </section>`;
-    }
-    function markComplete() {
-      const lesson = lessons[currentLessonIndex];
-      const progress = getProgress();
-      progress[lesson.id] = progress[lesson.id] || {};
-      progress[lesson.id].completed = true;
-      progress[lesson.id].lastPracticed = new Date().toISOString().slice(0, 10);
-      saveProgress(progress);
-      renderLesson();
-    }
-    function saveBestBpm() {
-      const lesson = lessons[currentLessonIndex];
-      const progress = getProgress();
-      progress[lesson.id] = progress[lesson.id] || {};
-      progress[lesson.id].bestBpm = Number(bpmInput.value);
-      progress[lesson.id].lastPracticed = new Date().toISOString().slice(0, 10);
-      saveProgress(progress);
-      renderLesson();
-    }
-    function saveNotes() {
-      const lesson = lessons[currentLessonIndex];
-      const progress = getProgress();
-      progress[lesson.id] = progress[lesson.id] || {};
-      progress[lesson.id].notes = document.getElementById("lessonNotes").value;
-      saveProgress(progress);
-      renderLesson();
-    }
-    function nextPage() {
-      if (currentLessonIndex === null) return;
-      const lesson = lessons[currentLessonIndex];
-      if (currentPageIndex < lesson.pages.length - 1) {
-        currentPageIndex++;
-        renderLesson();
-        window.scrollTo(0, 0);
-        return;
-      }
-      if (currentLessonIndex < lessons.length - 1) {
-        openLesson(currentLessonIndex + 1, 0);
-        window.scrollTo(0, 0);
-        return;
-      }
-      syncBpm(getGlobalBpm());
-    renderHome();
-    }
-    function previousPage() {
-      if (currentLessonIndex === null) return;
-      if (currentPageIndex > 0) {
-        currentPageIndex--;
-        renderLesson();
-        window.scrollTo(0, 0);
-        return;
-      }
-      if (currentLessonIndex > 0) {
-        const previousLesson = lessons[currentLessonIndex - 1];
-        openLesson(currentLessonIndex - 1, previousLesson.pages.length - 1);
-        window.scrollTo(0, 0);
-        return;
-      }
-      renderHome();
-    }
-    nextBtn.addEventListener("click", nextPage);
-    backBtn.addEventListener("click", previousPage);
-    homeBtn.addEventListener("click", renderHome);
-    renderHome();
-  </script>
+bpmInput.addEventListener("focus",()=>{if(isPlaying)stopMetronome()});
+bpmInput.addEventListener("input",e=>syncBpm(e.target.value));
+bpmInput.addEventListener("blur",async()=>{if(Number(bpmInput.value)>0)await startMetronome()});
+bpmSlider.addEventListener("pointerdown",()=>{if(isPlaying)stopMetronome()});
+bpmSlider.addEventListener("input",e=>syncBpm(e.target.value));
+bpmSlider.addEventListener("change",async()=>{if(Number(bpmSlider.value)>0)await startMetronome()});
+bpmDown.addEventListener("click",()=>syncBpm(Number(bpmInput.value)-5));
+bpmUp.addEventListener("click",()=>syncBpm(Number(bpmInput.value)+5));
+metroToggle.addEventListener("click",async()=>{if(isPlaying)stopMetronome();else{await requestWakeLock();await startMetronome()}});
+nextBtn.addEventListener("click",nextPage);
+backBtn.addEventListener("click",previousPage);
+homeBtn.addEventListener("click",renderHome);
+syncBpm(getGlobalBpm());
+renderHome();
+</script>
 </body>
 </html>

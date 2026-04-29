@@ -1,37 +1,33 @@
-# Guitar Practice App Prototype
+# Shredmasster
 
-## What this includes
+A single-page guitar practice app for scale fingerings, sequences, intervals, chords, voicings, arpeggios, notes, and metronome practice.
 
-- Fixed metronome bar at the top of every page
-- Editable BPM number
-- BPM slider
-- Start/stop click
-- Home menu with lessons
-- Lesson pages with tabs/fingering
-- Bottom navigation with back, home and next
-- Local progress saving:
-  - completed
-  - best BPM
-  - notes
-  - last BPM
+## Open Locally
 
-## How to run
+Open `index.html` directly in a browser.
 
-Open `index.html` in a browser.
+```bash
+open index.html
+```
 
-No installation needed.
+## Deploy With GitHub Pages
 
-## Files
+1. Push this repo to GitHub.
+2. In the GitHub repo, go to `Settings` -> `Pages`.
+3. Set `Source` to `Deploy from a branch`.
+4. Choose the `main` branch and `/root`.
+5. Save.
 
-- `index.html`
-- `style.css`
-- `app.js`
+GitHub Pages will serve the app from the root `index.html`.
 
-## Next improvements
+## Project Structure
 
-1. Better metronome timing using scheduled Web Audio instead of simple interval timing.
-2. Proper fretboard diagrams.
-3. Better tab editor.
-4. Import/export lesson JSON.
-5. User accounts and cloud sync.
-6. Mobile app wrapper or React Native version.
+```text
+.
+├── index.html
+├── README.md
+├── .gitignore
+└── .nojekyll
+```
+
+The app is intentionally self-contained: HTML, CSS, and JavaScript all live in `index.html`.
