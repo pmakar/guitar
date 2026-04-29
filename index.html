@@ -246,6 +246,18 @@
       background:linear-gradient(180deg,rgba(255,255,255,.035),rgba(0,0,0,.15)),#0d1215;
     }
     .visual-card strong{display:block;margin-bottom:8px;color:#fff;font-size:18px;text-transform:uppercase}
+    .diagram-row{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}
+    .diagram-block{min-width:150px;flex:1 1 150px}
+    .diagram-label{margin-bottom:6px;color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.06em}
+    .mini-fretboard{
+      overflow:hidden;
+      border:1px solid var(--line);
+      border-radius:8px;
+      background:
+        repeating-linear-gradient(0deg,rgba(255,255,255,.018) 0,rgba(255,255,255,.018) 1px,transparent 1px,transparent 8px),
+        #090d10;
+    }
+    .mini-fretboard svg{display:block;width:100%;height:auto}
     .formula-line{font-family:"SFMono-Regular","Courier New",monospace;letter-spacing:0;color:var(--text);font-size:14px;line-height:1.5;white-space:pre-wrap}
     .scalar-stack{display:grid;gap:14px}
     .compact-list{display:grid;gap:8px}
@@ -363,6 +375,25 @@ function makeDropPages(type,inversion,cards){
     {heading:`${inversion} - II-V-I`,body:"Apply the same shape to real harmonic movement.",cards:[["Major II-V-I","Am7 -> D7 -> Gmaj7","essential"],["Minor II-V-I","Bm7b5 -> E7 -> AmMaj7","advanced"]]}
   ];
 }
+const triadStringSets=[
+  ["Strings 6-5-4","E A D"],
+  ["Strings 5-4-3","A D G"],
+  ["Strings 4-3-2","D G B"],
+  ["Strings 3-2-1","G B e"]
+];
+const triadInversions=[
+  ["Root","1 3 5"],
+  ["1st Inversion","3 5 1"],
+  ["2nd Inversion","5 1 3"]
+];
+function makeTriadStringSetCards(){
+  return triadStringSets.flatMap(set=>triadInversions.map(inversion=>[
+    `${set[0]} - ${inversion[0]}`,
+    inversion[1],
+    set[1],
+    {strings:set[1],degrees:inversion[1].split(" ")}
+  ]));
+}
 const majorModeShapes=[
   {mode:"Aeolian",root:"E",shapeIndex:5},
   {mode:"Locrian",root:"F#",shapeIndex:6},
@@ -451,19 +482,18 @@ const lessons=[
   makeScaleLesson(3,"Melodic Minor Scale",melodicMinorShapes,"3 Notes Per String"),
   makeScaleLesson(4,"Whole Tone Scale",wholeToneShapes,"3 Notes Per String"),
   makeScaleLesson(5,"Diminished Scale",diminishedShapes,"3 Notes Per String"),
-  {id:"6",title:"Triads in Position",category:"Triads",targetBpm:65,visualType:"chordGrid",pages:[{heading:"Diatonic Triads in G",body:"Stay in one position and harmonise the scale.",cards:[["G","G B D","I . Major"],["Am","A C E","ii . Minor"],["Bm","B D F#","iii . Minor"],["C","C E G","IV . Major"],["D","D F# A","V . Major"],["Em","E G B","vi . Minor"],["F#dim","F# A C","vii°"]]},{heading:"Triad Inversions",body:"Root, first inversion, second inversion.",cards:[["Root","1 3 5","stable"],["1st Inv","3 5 1","smooth bass"],["2nd Inv","5 1 3","open sound"]]}]},
-  {id:"7",title:"Triads on String Sets",category:"Triads",targetBpm:65,visualType:"stringSets",pages:[{heading:"Top String Set",body:"Triads on strings 1-2-3.",cards:[["Set 1","e B G","lead voicings"],["Inversions","R . 1st . 2nd","horizontal movement"]]},{heading:"Middle String Set",body:"Triads on strings 2-3-4.",cards:[["Set 2","B G D","compact grips"]]},{heading:"Lower Middle String Set",body:"Triads on strings 3-4-5.",cards:[["Set 3","G D A","rhythm voicings"]]},{heading:"Low String Set",body:"Triads on strings 4-5-6.",cards:[["Set 4","D A E","heavy low grips"]]}]},
-  {id:"8",title:"Drop 2",category:"Voicings",targetBpm:60,visualType:"voicing",pages:makeDropPages("Drop 2","Root Position",dropQualities.root)},
-  {id:"9",title:"Drop 2 - 1st Inversion",category:"Voicings",targetBpm:60,visualType:"voicing",pages:makeDropPages("Drop 2","1st Inversion",dropQualities.first)},
-  {id:"10",title:"Drop 2 - 2nd Inversion",category:"Voicings",targetBpm:60,visualType:"voicing",pages:makeDropPages("Drop 2","2nd Inversion",dropQualities.second)},
-  {id:"11",title:"Drop 2 - 3rd Inversion",category:"Voicings",targetBpm:60,visualType:"voicing",pages:makeDropPages("Drop 2","3rd Inversion",dropQualities.third)},
-  {id:"12",title:"Drop 3",category:"Voicings",targetBpm:60,visualType:"voicing",pages:makeDropPages("Drop 3","Root Position",[["Maj7","1 7 3 5"],["Min7","1 b7 b3 5"],["Dom7","1 b7 3 5"],["HalfDim","1 b7 b3 b5"]])},
-  {id:"13",title:"Drop 3 - 1st Inversion",category:"Voicings",targetBpm:60,visualType:"voicing",pages:makeDropPages("Drop 3","1st Inversion",[["Maj7","3 1 5 7"],["Min7","b3 1 5 b7"],["Dom7","3 1 5 b7"],["HalfDim","b3 1 b5 b7"]])},
-  {id:"14",title:"Drop 3 - 2nd Inversion",category:"Voicings",targetBpm:60,visualType:"voicing",pages:makeDropPages("Drop 3","2nd Inversion",[["Maj7","5 3 7 1"],["Min7","5 b3 b7 1"],["Dom7","5 3 b7 1"],["HalfDim","b5 b3 b7 1"]])},
-  {id:"15",title:"Drop 3 - 3rd Inversion",category:"Voicings",targetBpm:60,visualType:"voicing",pages:makeDropPages("Drop 3","3rd Inversion",[["Maj7","7 5 1 3"],["Min7","b7 5 1 b3"],["Dom7","b7 5 1 3"],["HalfDim","b7 b5 1 b3"]])},
-  {id:"16",title:"Arpeggios - All",category:"Arpeggios",targetBpm:70,visualType:"arpeggio",pages:[{heading:"Triad Arpeggios",body:"Core triad qualities.",cards:[["Major","1 3 5","G B D"],["Minor","1 b3 5","A C E"],["Dim","1 b3 b5","F# A C"],["Aug","1 3 #5","G B D#"]]},{heading:"Seventh Arpeggios",body:"Core seventh chord qualities.",cards:[["Maj7","1 3 5 7","G B D F#"],["Min7","1 b3 5 b7","A C E G"],["Dom7","1 3 5 b7","D F# A C"],["HalfDim","1 b3 b5 b7","F# A C E"],["Dim7","1 b3 b5 bb7","F# A C Eb"]]}]},
-  {id:"17",title:"Suspended Chords",category:"Chords",targetBpm:60,visualType:"chordGrid",pages:[{heading:"Suspended Chord Types",body:"Replace the 3rd with 2 or 4.",cards:[["Sus2","1 2 5","open"],["Sus4","1 4 5","classic"],["7sus4","1 4 5 b7","dominant sus"],["9sus","1 4 5 b7 9","fusion"]]}]},
-  {id:"18",title:"Quartal Chords",category:"Modern Voicings",targetBpm:60,visualType:"chordGrid",pages:[{heading:"Quartal Structures",body:"Fourth-based harmony.",cards:[["Perfect 4ths","1 4 b7","stacked fourths"],["Mixed 4ths","1 4 7","lydian brightness"],["Tritone Color","1 #4 7","horror tension"],["Low Quartal","5 1 4","heavy riff grip"]]}]}
+  {id:"6",title:"Triads",category:"Triads",targetBpm:65,visualType:"stringSets",pages:[{heading:"String Sets and Inversions",body:"All triad inversions ordered from the bottom strings toward the top.",cards:makeTriadStringSetCards()}]},
+  {id:"7",title:"Drop 2",category:"Voicings",targetBpm:60,visualType:"voicing",pages:makeDropPages("Drop 2","Root Position",dropQualities.root)},
+  {id:"8",title:"Drop 2 - 1st Inversion",category:"Voicings",targetBpm:60,visualType:"voicing",pages:makeDropPages("Drop 2","1st Inversion",dropQualities.first)},
+  {id:"9",title:"Drop 2 - 2nd Inversion",category:"Voicings",targetBpm:60,visualType:"voicing",pages:makeDropPages("Drop 2","2nd Inversion",dropQualities.second)},
+  {id:"10",title:"Drop 2 - 3rd Inversion",category:"Voicings",targetBpm:60,visualType:"voicing",pages:makeDropPages("Drop 2","3rd Inversion",dropQualities.third)},
+  {id:"11",title:"Drop 3",category:"Voicings",targetBpm:60,visualType:"voicing",pages:makeDropPages("Drop 3","Root Position",[["Maj7","1 7 3 5"],["Min7","1 b7 b3 5"],["Dom7","1 b7 3 5"],["HalfDim","1 b7 b3 b5"]])},
+  {id:"12",title:"Drop 3 - 1st Inversion",category:"Voicings",targetBpm:60,visualType:"voicing",pages:makeDropPages("Drop 3","1st Inversion",[["Maj7","3 1 5 7"],["Min7","b3 1 5 b7"],["Dom7","3 1 5 b7"],["HalfDim","b3 1 b5 b7"]])},
+  {id:"13",title:"Drop 3 - 2nd Inversion",category:"Voicings",targetBpm:60,visualType:"voicing",pages:makeDropPages("Drop 3","2nd Inversion",[["Maj7","5 3 7 1"],["Min7","5 b3 b7 1"],["Dom7","5 3 b7 1"],["HalfDim","b5 b3 b7 1"]])},
+  {id:"14",title:"Drop 3 - 3rd Inversion",category:"Voicings",targetBpm:60,visualType:"voicing",pages:makeDropPages("Drop 3","3rd Inversion",[["Maj7","7 5 1 3"],["Min7","b7 5 1 b3"],["Dom7","b7 5 1 3"],["HalfDim","b7 b5 1 b3"]])},
+  {id:"15",title:"Arpeggios - All",category:"Arpeggios",targetBpm:70,visualType:"arpeggio",pages:[{heading:"Triad Arpeggios",body:"Core triad qualities.",cards:[["Major","1 3 5","G B D"],["Minor","1 b3 5","A C E"],["Dim","1 b3 b5","F# A C"],["Aug","1 3 #5","G B D#"]]},{heading:"Seventh Arpeggios",body:"Core seventh chord qualities.",cards:[["Maj7","1 3 5 7","G B D F#"],["Min7","1 b3 5 b7","A C E G"],["Dom7","1 3 5 b7","D F# A C"],["HalfDim","1 b3 b5 b7","F# A C E"],["Dim7","1 b3 b5 bb7","F# A C Eb"]]}]},
+  {id:"16",title:"Suspended Chords",category:"Chords",targetBpm:60,visualType:"chordGrid",pages:[{heading:"Suspended Chord Types",body:"Replace the 3rd with 2 or 4.",cards:[["Sus2","1 2 5","open"],["Sus4","1 4 5","classic"],["7sus4","1 4 5 b7","dominant sus"],["9sus","1 4 5 b7 9","fusion"]]}]},
+  {id:"17",title:"Quartal Chords",category:"Modern Voicings",targetBpm:60,visualType:"chordGrid",pages:[{heading:"Quartal Structures",body:"Fourth-based harmony.",cards:[["Perfect 4ths","1 4 b7","stacked fourths"],["Mixed 4ths","1 4 7","lydian brightness"],["Tritone Color","1 #4 7","horror tension"],["Low Quartal","5 1 4","heavy riff grip"]]}]}
 ];
 
 const shapeTabs=[
@@ -590,7 +620,121 @@ function renderFretboard(shape){
   return `<svg width="${width}" height="${height}" viewBox="0 0 ${width} ${height}" role="img" aria-label="Fretboard diagram">${fretNumbers}${labels}${stringLines}${fretLines}${dots}</svg>`;
 }
 function renderDegreeStrip(degrees=[]){return `<div class="degree-strip">${degrees.map(d=>`<span class="degree">${html(d)}</span>`).join("")}</div>`}
-function renderCards(cards=[]){return `<div class="visual-grid">${cards.map(c=>`<div class="visual-card"><strong>${html(c[0])}</strong><div class="formula-line">${html(c[1])}</div><div class="meta">${html(c[2]||"")}</div></div>`).join("")}</div>`}
+const notePc={C:0,"C#":1,Db:1,D:2,"D#":3,Eb:3,E:4,F:5,"F#":6,Gb:6,G:7,"G#":8,Ab:8,A:9,"A#":10,Bb:10,B:11};
+const degreePc={"1":0,R:0,b2:1,"2":2,b3:3,"3":4,"4":5,"#4":6,b5:6,"5":7,"#5":8,b6:8,"6":9,bb7:9,b7:10,"7":11,"9":2};
+function findFretForPc(stringNumber,pc,start=3){
+  for(let f=start;f<start+8;f++){
+    if((stringPitch[stringNumber]+f)%12===pc)return f;
+  }
+  for(let f=0;f<17;f++){
+    if((stringPitch[stringNumber]+f)%12===pc)return f;
+  }
+  return start;
+}
+function chordRootPc(name){
+  const match=String(name).match(/[A-G](?:#|b)?/);
+  return match?notePc[match[0]]:scaleRootG;
+}
+function chordFormula(name){
+  const value=String(name);
+  if(/m7b5|half/i.test(value))return ["1","b3","b5","b7"];
+  if(/dim7/i.test(value))return ["1","b3","b5","bb7"];
+  if(/dim/i.test(value))return ["1","b3","b5"];
+  if(/mMaj7/i.test(value))return ["1","b3","5","7"];
+  if(/maj7/i.test(value))return ["1","3","5","7"];
+  if(/min7|m7/.test(value))return ["1","b3","5","b7"];
+  if(/sus2/i.test(value))return ["1","2","5"];
+  if(/sus4/i.test(value))return ["1","4","5"];
+  if(/9sus/i.test(value))return ["1","4","5","b7","9"];
+  if(/aug/i.test(value))return ["1","3","#5"];
+  if(/7/.test(value))return ["1","3","5","b7"];
+  if(/^m|Min|minor/i.test(value))return ["1","b3","5"];
+  return ["1","3","5"];
+}
+function stringsForCount(count){
+  if(count<=3)return [3,2,1].slice(0,count);
+  if(count===4)return [4,3,2,1];
+  return [5,4,3,2,1].slice(0,count);
+}
+function shapeFromPcs(name,pcs,start=3){
+  const strings=stringsForCount(pcs.length);
+  const notes=pcs.map((pc,index)=>{
+    const s=strings[index]||1;
+    return {s,f:findFretForPc(s,pc,start),n:pitchNames[pc]};
+  });
+  return {name,startFret:Math.max(0,Math.min(...notes.map(note=>note.f))),notes};
+}
+function shapeFromDegrees(name,degrees,rootPc=scaleRootG,start=3){
+  return shapeFromPcs(name,degrees.map(degree=>(rootPc+(degreePc[degree]??0))%12),start);
+}
+function shapeFromDegreesOnStrings(name,degrees,stringsValue,rootPc=scaleRootG,start=3){
+  const stringNames={e:1,B:2,G:3,D:4,A:5,E:6};
+  const strings=String(stringsValue).split(/\s+/).map(token=>stringNames[token]).filter(Boolean);
+  const notes=degrees.map((degree,index)=>{
+    const s=strings[index]||strings[strings.length-1]||1;
+    const pc=(rootPc+(degreePc[degree]??0))%12;
+    return {s,f:findFretForPc(s,pc,start),n:pitchNames[pc]};
+  });
+  return {name,startFret:Math.max(0,Math.min(...notes.map(note=>note.f))),notes};
+}
+function parseDegreeTokens(value){
+  return String(value).replace(/[·.]/g," ").split(/\s+/).map(token=>token.trim()).filter(token=>degreePc[token]!==undefined);
+}
+function parseNoteTokens(value){
+  return String(value).split(/\s+/).map(token=>token.trim()).filter(token=>notePc[token]!==undefined);
+}
+function progressionNames(value){
+  return String(value).split(/\s*(?:->|→)\s*/).map(item=>item.trim()).filter(Boolean);
+}
+function stringSetShape(name,value){
+  const stringNames={e:1,B:2,G:3,D:4,A:5,E:6};
+  const strings=String(value).split(/\s+/).map(token=>stringNames[token]).filter(Boolean);
+  const frets=[5,4,3,5,4,3];
+  return {name,startFret:3,notes:strings.map((s,index)=>({s,f:frets[index]||3,n:""}))};
+}
+function renderMiniFretboard(shape){
+  const minFret=Math.max(0,Math.min(...shape.notes.map(note=>note.f)));
+  const maxFret=Math.max(...shape.notes.map(note=>note.f));
+  const start=shape.startFret??Math.max(0,minFret-1);
+  const fretsShown=Math.max(5,Math.min(8,maxFret-start+2));
+  const width=280,height=128,left=34,top=18,stringGap=16,fretGap=28;
+  const stringLines=[1,2,3,4,5,6].map((s,i)=>`<line x1="${left}" y1="${top+i*stringGap}" x2="${left+fretsShown*fretGap}" y2="${top+i*stringGap}" stroke="#6f7b82" stroke-width="${1+i*.18}"/>`).join("");
+  const fretLines=Array.from({length:fretsShown+1},(_,i)=>`<line x1="${left+i*fretGap}" y1="${top}" x2="${left+i*fretGap}" y2="${top+stringGap*5}" stroke="#4e5960" stroke-width="${i===0?2:1}"/>`).join("");
+  const dots=shape.notes.map(note=>{
+    const x=left+(note.f-start)*fretGap+fretGap/2,y=top+(note.s-1)*stringGap;
+    return `<circle cx="${x}" cy="${y}" r="7" fill="#edf2f3" stroke="#090d10" stroke-width="1.5"/>`;
+  }).join("");
+  const labels=["e","B","G","D","A","E"].map((label,i)=>`<text x="12" y="${top+i*stringGap+4}" fill="#98a6ac" font-size="10">${label}</text>`).join("");
+  return `<div class="mini-fretboard"><svg width="${width}" height="${height}" viewBox="0 0 ${width} ${height}" role="img" aria-label="${html(shape.name)} fretboard diagram">${labels}${stringLines}${fretLines}${dots}</svg></div>`;
+}
+function renderDiagramBlocks(card,type){
+  const [title,value,,options]=card;
+  if(options?.strings&&options?.degrees){
+    return `<div class="diagram-block">${renderMiniFretboard(shapeFromDegreesOnStrings(title,options.degrees,options.strings))}</div>`;
+  }
+  const progression=progressionNames(value);
+  if(progression.length>1){
+    return progression.map(name=>`<div class="diagram-block"><div class="diagram-label">${html(name)}</div>${renderMiniFretboard(shapeFromDegrees(name,chordFormula(name),chordRootPc(name)))}</div>`).join("");
+  }
+  if(type==="stringSets"||/^e B G|^B G D|^G D A|^D A E/.test(value)){
+    return `<div class="diagram-block">${renderMiniFretboard(stringSetShape(title,value))}</div>`;
+  }
+  if(title==="Inversions"){
+    return [["Root",["1","3","5"]],["1st",["3","5","1"]],["2nd",["5","1","3"]]].map(item=>`<div class="diagram-block"><div class="diagram-label">${item[0]}</div>${renderMiniFretboard(shapeFromDegrees(item[0],item[1]))}</div>`).join("");
+  }
+  const degreeTokens=parseDegreeTokens(value);
+  if(degreeTokens.length){
+    return `<div class="diagram-block">${renderMiniFretboard(shapeFromDegrees(title,degreeTokens))}</div>`;
+  }
+  const noteTokens=parseNoteTokens(value);
+  if(noteTokens.length){
+    return `<div class="diagram-block">${renderMiniFretboard(shapeFromPcs(title,noteTokens.map(note=>notePc[note])))}</div>`;
+  }
+  return `<div class="diagram-block">${renderMiniFretboard(shapeFromDegrees(title,chordFormula(title),chordRootPc(title)))}</div>`;
+}
+function renderCards(cards=[],type=""){
+  return `<div class="visual-grid">${cards.map(card=>`<div class="visual-card"><strong>${html(card[0])}</strong><div class="diagram-row">${renderDiagramBlocks(card,type)}</div><div class="meta">${html(card[2]||"")}</div></div>`).join("")}</div>`;
+}
 function renderScalarLesson(page){
   return `<div class="scalar-stack">
     <section class="card">
@@ -622,7 +766,7 @@ function renderScalarLesson(page){
 }
 function renderVisualLesson(page,type){
   if(type==="sequence"||type==="interval")return `<section class="card"><h3>${type==="sequence"?"Pattern":"Interval Map"}</h3>${renderDegreeStrip(page.degrees||[])}<div class="tab-box" style="margin-top:12px"><pre>${html(page.formula||"")}</pre></div></section>`;
-  if(["chordGrid","stringSets","voicing","arpeggio"].includes(type))return `<section class="card"><h3>${type==="voicing"?"Voicing Blocks":type==="arpeggio"?"Arpeggio Blocks":"Diagram Blocks"}</h3>${renderCards(page.cards||[])}</section>`;
+  if(["chordGrid","stringSets","voicing","arpeggio"].includes(type))return `<section class="card"><h3>${type==="voicing"?"Voicing Blocks":type==="arpeggio"?"Arpeggio Blocks":"Diagram Blocks"}</h3>${renderCards(page.cards||[],type)}</section>`;
   return `<section class="card"><h3>Lesson Material</h3><div class="tab-box"><pre>${html(page.tab||"")}</pre></div></section>`;
 }
 function renderProgressBlock(saved){
