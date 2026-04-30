@@ -3,21 +3,23 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>Shredmasster</title>
+  <title>Shredmaster</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23090a0c'/%3E%3Cpath d='M32 6c14 11 22 24 21 37-.8 12-10 18-21 14-11 4-20-2-21-14C10 30 18 17 32 6Z' fill='%23f3f5f4'/%3E%3Cpath d='M32 11c11 10 17 20 16 31-.6 8-7 12-16 9-9 3-15-1-16-9-1-11 5-21 16-31Z' fill='%23111417'/%3E%3Cpath d='M18 45 46 17' stroke='%23d43f36' stroke-width='7' stroke-linecap='round'/%3E%3Cpath d='M21 48 49 20' stroke='%23d8b46d' stroke-width='2.5' stroke-linecap='round'/%3E%3Cpath d='M17 35 36 16M27 50 50 27' stroke='%23f3f5f4' stroke-width='2' stroke-linecap='round' opacity='.9'/%3E%3C/svg%3E" />
   <style>
     :root{
       --bottom-height:118px;
-      --bg:#08090a;
-      --surface:#11161a;
-      --surface-2:#171e23;
-      --surface-3:#20282f;
-      --text:#edf2f3;
-      --muted:#98a6ac;
-      --line:#2b353c;
-      --accent:#b9362f;
-      --accent-2:#d9b36c;
+      --bg:#090a0c;
+      --surface:#111417;
+      --surface-2:#181d21;
+      --surface-3:#22282d;
+      --text:#f3f5f4;
+      --muted:#a5b0b5;
+      --line:#303840;
+      --accent:#d43f36;
+      --accent-2:#d8b46d;
+      --ink:#070809;
       --good:#63b37b;
-      --shadow:0 18px 52px rgba(0,0,0,.38);
+      --shadow:0 18px 46px rgba(0,0,0,.36);
     }
 
     *{box-sizing:border-box}
@@ -31,16 +33,17 @@
       letter-spacing:0;
       color:var(--text);
       background:
-        linear-gradient(90deg,rgba(185,54,47,.16),transparent 26%,transparent 72%,rgba(217,179,108,.08)),
-        repeating-linear-gradient(0deg,rgba(255,255,255,.025) 0,rgba(255,255,255,.025) 1px,transparent 1px,transparent 8px),
-        radial-gradient(circle at 50% 0%,#182027 0,#08090a 58%);
+        linear-gradient(180deg,rgba(255,255,255,.04),transparent 160px),
+        linear-gradient(90deg,rgba(212,63,54,.13),transparent 30%,transparent 74%,rgba(216,180,109,.09)),
+        repeating-linear-gradient(90deg,rgba(255,255,255,.018) 0,rgba(255,255,255,.018) 1px,transparent 1px,transparent 42px),
+        linear-gradient(135deg,#0d1013 0%,#090a0c 52%,#0d0e10 100%);
     }
 
     button,input,textarea{font:inherit}
     button{
       appearance:none;
       border:1px solid var(--line);
-      border-radius:8px;
+      border-radius:6px;
       background:linear-gradient(180deg,rgba(255,255,255,.07),rgba(0,0,0,.16)),var(--surface-2);
       color:var(--text);
       min-height:42px;
@@ -53,7 +56,7 @@
       transition:transform .12s ease,border-color .12s ease,background .12s ease;
     }
     button:active{transform:translateY(1px)}
-    button.primary{background:linear-gradient(180deg,#d4483f,#9e2823);border-color:#e45c52;color:#fff}
+    button.primary{background:linear-gradient(180deg,#e14b42,#a92f29);border-color:#ed6159;color:#fff}
     button.ghost{background:#0b0f12}
     button.icon{width:44px;padding:0;display:grid;place-items:center;font-size:20px}
 
@@ -94,19 +97,36 @@
       align-items:center;
       gap:10px;
       padding:12px max(14px,env(safe-area-inset-left)) 10px;
-      background:rgba(7,9,11,.88);
+      background:rgba(7,9,11,.86);
       border-bottom:1px solid var(--line);
       backdrop-filter:blur(16px);
     }
     .brand{
       min-width:0;
-      text-align:center;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
       font-weight:900;
       text-transform:uppercase;
-      letter-spacing:.08em;
+      letter-spacing:.06em;
       color:#fff;
+      border-color:#3a444c;
+      background:linear-gradient(180deg,rgba(255,255,255,.08),rgba(255,255,255,.02)),#0c1013;
     }
-    .brand span{color:var(--accent-2)}
+    .brand-word{font-size:15px}
+    .logo-svg{
+      display:block;
+      width:34px;
+      height:34px;
+      flex:0 0 auto;
+      filter:drop-shadow(0 8px 18px rgba(0,0,0,.34));
+    }
+    .logo-svg .logo-shell{fill:#f3f5f4}
+    .logo-svg .logo-core{fill:#111417}
+    .logo-svg .logo-slash{stroke:var(--accent)}
+    .logo-svg .logo-string{stroke:var(--accent-2)}
+    .logo-svg .logo-wire{stroke:#f3f5f4}
 
     .bottom-nav{
       position:fixed;
@@ -131,7 +151,7 @@
     }
 
     main{
-      width:min(100%,1040px);
+      width:min(100%,1180px);
       margin:0 auto;
       padding:88px 16px calc(var(--bottom-height) + 24px);
     }
@@ -148,44 +168,94 @@
     p{line-height:1.55}
 
     .hero{
-      min-height:220px;
+      min-height:270px;
       display:grid;
-      align-content:end;
-      border-radius:8px;
+      align-content:stretch;
+      border-radius:6px;
       border:1px solid var(--line);
-      border-left:5px solid var(--accent);
-      padding:22px;
-      margin-bottom:16px;
+      padding:24px;
+      margin-bottom:18px;
       box-shadow:var(--shadow);
       background:
-        linear-gradient(180deg,rgba(8,9,10,.08),rgba(8,9,10,.82)),
-        radial-gradient(circle at 90% 18%,rgba(217,179,108,.24),transparent 28%),
-        linear-gradient(135deg,#1e272d,#0c1013 58%,#08090a);
+        linear-gradient(90deg,rgba(212,63,54,.18),transparent 34%,rgba(216,180,109,.1)),
+        repeating-linear-gradient(115deg,rgba(255,255,255,.04) 0,rgba(255,255,255,.04) 1px,transparent 1px,transparent 13px),
+        linear-gradient(135deg,#252b30,#11161a 58%,#090a0c);
+    }
+    .hero-lockup{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:22px;
+      min-height:100%;
+    }
+    .hero-logo{
+      width:104px;
+      height:104px;
+    }
+    .hero h1{margin-bottom:6px}
+    .hero-main{
+      display:flex;
+      align-items:center;
+      gap:20px;
+      min-width:0;
+    }
+    .hero-copy{min-width:0}
+    .hero-stats{
+      display:grid;
+      grid-template-columns:repeat(3,minmax(82px,1fr));
+      gap:10px;
+      min-width:min(100%,330px);
+    }
+    .hero-stat{
+      border:1px solid rgba(255,255,255,.12);
+      border-radius:6px;
+      padding:12px;
+      background:rgba(8,10,12,.62);
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.05);
+    }
+    .hero-stat strong{
+      display:block;
+      color:#fff;
+      font-size:28px;
+      line-height:1;
+      font-weight:950;
+    }
+    .hero-stat span{
+      display:block;
+      margin-top:5px;
+      color:var(--muted);
+      font-size:11px;
+      font-weight:850;
+      text-transform:uppercase;
+      letter-spacing:.08em;
     }
     .card{
       min-width:0;
-      background:linear-gradient(180deg,rgba(255,255,255,.045),rgba(0,0,0,.18)),var(--surface);
+      background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(0,0,0,.16)),var(--surface);
       border:1px solid var(--line);
-      border-radius:8px;
-      padding:16px;
+      border-radius:6px;
+      padding:18px;
       margin-bottom:14px;
       box-shadow:0 10px 26px rgba(0,0,0,.2);
     }
     .meta{color:var(--muted);font-size:14px;line-height:1.45}
     .subtle{color:var(--muted)}
-    .lesson-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(238px,1fr));gap:12px}
+    .lesson-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px}
     .lesson-button{
       display:grid;
       grid-template-rows:auto 1fr auto;
       width:100%;
-      min-height:142px;
-      padding:15px;
+      min-height:158px;
+      padding:17px;
       text-align:left;
       text-transform:none;
       letter-spacing:0;
-      background:linear-gradient(160deg,rgba(255,255,255,.055),rgba(0,0,0,.12)),var(--surface-2);
+      background:
+        linear-gradient(90deg,rgba(212,63,54,.16),transparent 8px),
+        linear-gradient(160deg,rgba(255,255,255,.065),rgba(0,0,0,.14)),
+        var(--surface-2);
     }
-    .lesson-button:hover{border-color:#56636b}
+    .lesson-button:hover{border-color:#66747d;background-color:#1c2429}
     .lesson-top{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}
     .lesson-id{
       display:grid;
@@ -193,12 +263,13 @@
       width:34px;
       height:34px;
       flex:0 0 auto;
-      border-radius:50%;
-      background:var(--accent);
+      border-radius:6px;
+      background:#090d10;
+      border:1px solid rgba(216,180,109,.5);
       color:#fff;
       font-weight:900;
     }
-    .lesson-title{font-size:20px;line-height:1.05;font-weight:900;text-transform:uppercase}
+    .lesson-title{font-size:22px;line-height:1.03;font-weight:950;text-transform:uppercase}
     .status{
       display:inline-flex;
       align-items:center;
@@ -237,15 +308,25 @@
 
     .content-grid{display:grid;grid-template-columns:1fr;gap:14px}
     .content-grid>*{min-width:0}
-    .visual-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
+    .visual-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:14px}
     .visual-card{
       min-height:96px;
       border:1px solid var(--line);
-      border-radius:8px;
-      padding:13px;
-      background:linear-gradient(180deg,rgba(255,255,255,.035),rgba(0,0,0,.15)),#0d1215;
+      border-radius:6px;
+      padding:15px;
+      background:
+        linear-gradient(180deg,rgba(255,255,255,.045),rgba(0,0,0,.16)),
+        #0d1215;
     }
-    .visual-card strong{display:block;margin-bottom:8px;color:#fff;font-size:18px;text-transform:uppercase}
+    .visual-card strong{
+      display:block;
+      margin-bottom:10px;
+      color:#fff;
+      font-size:clamp(24px,2.7vw,34px);
+      line-height:.95;
+      text-transform:none;
+      letter-spacing:.01em;
+    }
     .string-set-break{
       grid-column:1/-1;
       margin-top:12px;
@@ -291,33 +372,35 @@
     .scale-board{
       min-width:0;
       border:1px solid var(--line);
-      border-radius:8px;
-      padding:12px;
-      background:#0d1215;
+      border-radius:6px;
+      padding:14px;
+      background:linear-gradient(180deg,rgba(255,255,255,.035),rgba(0,0,0,.12)),#0d1215;
     }
     .scale-board-title{
       display:flex;
-      justify-content:space-between;
-      gap:10px;
-      margin-bottom:10px;
+      justify-content:flex-start;
+      gap:14px;
+      margin-bottom:12px;
       color:#fff;
-      font-size:18px;
+      font-size:24px;
       font-weight:900;
       text-transform:uppercase;
     }
-    .scale-board-title span{color:var(--accent-2);font-size:14px}
-    .scale-board-title strong{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-    .scale-board-title strong span{
+    .scale-board-title strong{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+    .scale-name{letter-spacing:.02em}
+    .scale-chord{
       display:inline-flex;
       align-items:center;
-      min-height:24px;
-      padding:3px 8px;
-      border:1px solid rgba(217,179,108,.35);
-      border-radius:999px;
-      background:#090d10;
-      color:var(--accent-2);
-      font-size:13px;
-      line-height:1;
+      min-height:40px;
+      padding:6px 12px;
+      border:1px solid rgba(216,180,109,.55);
+      border-radius:6px;
+      background:linear-gradient(180deg,rgba(216,180,109,.12),rgba(0,0,0,.16)),#090d10;
+      color:#f1ce8a;
+      font-size:clamp(26px,3.2vw,40px);
+      font-weight:950;
+      line-height:.9;
+      text-transform:none;
     }
     .tab-box,.fretboard-wrap{
       overflow-x:auto;
@@ -354,6 +437,129 @@
       font-weight:900;
     }
     .degree.root{background:var(--accent);color:#fff;border-color:#f1d6d4}
+    .tech-stack{display:grid;gap:14px}
+    .tech-section{
+      border:1px solid var(--line);
+      border-radius:6px;
+      background:linear-gradient(180deg,rgba(255,255,255,.035),rgba(0,0,0,.14)),#0d1215;
+      overflow:hidden;
+    }
+    .tech-section-head{
+      display:flex;
+      align-items:flex-end;
+      justify-content:space-between;
+      gap:14px;
+      padding:16px;
+      border-bottom:1px solid var(--line);
+      background:#090d10;
+    }
+    .tech-section-head h3{margin:0}
+    .tech-section-head .meta{text-align:right}
+    .tech-grid{display:grid;grid-template-columns:1fr;gap:12px;padding:14px}
+    .exercise-card{
+      display:grid;
+      gap:12px;
+      align-content:start;
+      min-height:244px;
+      border:1px solid rgba(255,255,255,.1);
+      border-radius:6px;
+      padding:14px;
+      background:linear-gradient(180deg,rgba(255,255,255,.045),rgba(0,0,0,.16)),#11171b;
+    }
+    .exercise-card strong{
+      display:block;
+      color:#fff;
+      font-size:clamp(22px,2.5vw,31px);
+      line-height:.98;
+      text-transform:uppercase;
+    }
+    .exercise-meta{display:flex;gap:8px;flex-wrap:wrap}
+    .tech-tag{
+      display:inline-flex;
+      align-items:center;
+      min-height:28px;
+      border:1px solid rgba(216,180,109,.42);
+      border-radius:999px;
+      padding:4px 9px;
+      color:#f1ce8a;
+      background:rgba(216,180,109,.08);
+      font-size:12px;
+      font-weight:850;
+      text-transform:uppercase;
+      letter-spacing:.06em;
+    }
+    .movement-code{
+      display:flex;
+      flex-wrap:wrap;
+      gap:6px;
+      font-family:"SFMono-Regular","Courier New",monospace;
+      letter-spacing:0;
+    }
+    .move-cell{
+      min-width:34px;
+      min-height:30px;
+      display:grid;
+      place-items:center;
+      border:1px solid var(--line);
+      border-radius:6px;
+      padding:4px 7px;
+      color:#fff;
+      background:#090d10;
+      font-size:13px;
+      font-weight:800;
+    }
+    .move-cell.accent{border-color:rgba(212,63,54,.72);background:rgba(212,63,54,.18)}
+    .notation-board{
+      overflow-x:auto;
+      border:1px solid rgba(255,255,255,.14);
+      border-radius:8px;
+      background:#050607;
+      box-shadow:inset 0 0 0 1px rgba(255,255,255,.08),0 10px 22px rgba(0,0,0,.3);
+    }
+    .notation-board svg{display:block;width:auto;max-width:none;min-width:760px;height:auto}
+    .notation-key{
+      display:flex;
+      gap:8px;
+      overflow-x:auto;
+      padding:10px 2px 2px;
+    }
+    .time-step{
+      min-width:68px;
+      border:1px solid var(--line);
+      border-radius:6px;
+      padding:7px 8px;
+      background:#090d10;
+      color:#fff;
+      font-family:"SFMono-Regular","Courier New",monospace;
+      letter-spacing:0;
+    }
+    .time-step.rest{border-color:rgba(216,180,109,.45);background:rgba(216,180,109,.08)}
+    .time-step strong{display:block;color:#f1ce8a;font-size:11px;line-height:1}
+    .time-step span{display:block;margin-top:5px;font-size:13px;font-weight:850}
+    .time-step small{display:block;margin-top:4px;color:var(--muted);font-size:10px}
+    .exercise-info{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(170px,1fr));
+      gap:8px;
+      margin-top:2px;
+    }
+    .exercise-info-item{
+      border:1px solid rgba(255,255,255,.1);
+      border-radius:6px;
+      padding:10px;
+      background:#090d10;
+    }
+    .exercise-info-item strong{
+      display:block;
+      margin:0 0 6px;
+      color:#f1ce8a;
+      font-size:12px;
+      line-height:1;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+    }
+    .exercise-info-item span{display:block;color:var(--muted);font-size:13px;line-height:1.35}
+    .exercise-note{margin:0;color:var(--muted);font-size:14px;line-height:1.45}
     .progress-grid{display:grid;grid-template-columns:1fr;gap:10px;margin-bottom:12px}
     .notes-actions{display:flex;gap:10px;align-items:center;justify-content:flex-end;margin-top:10px}
 
@@ -368,13 +574,27 @@
       #metroToggle{grid-column:1/-1;width:100%}
       h1{font-size:42px}
       .hero{padding:18px;min-height:210px}
+      .hero-lockup{align-items:flex-start;display:grid}
+      .hero-main{align-items:flex-start}
+      .hero-logo{width:68px;height:68px}
+      .hero-stats{grid-template-columns:repeat(3,1fr);min-width:0}
+      .brand-word{font-size:13px}
     }
   </style>
 </head>
 <body>
   <header class="top-nav">
     <button class="icon" id="backBtn" aria-label="Previous">&lt;</button>
-    <button class="brand ghost" id="homeBtn" aria-label="Home">Shred<span>masster</span></button>
+    <button class="brand ghost" id="homeBtn" aria-label="Home">
+      <svg class="logo-svg" viewBox="0 0 64 64" aria-hidden="true">
+        <path class="logo-shell" d="M32 6c14 11 22 24 21 37-.8 12-10 18-21 14-11 4-20-2-21-14C10 30 18 17 32 6Z"/>
+        <path class="logo-core" d="M32 11c11 10 17 20 16 31-.6 8-7 12-16 9-9 3-15-1-16-9-1-11 5-21 16-31Z"/>
+        <path class="logo-slash" d="M18 45 46 17" fill="none" stroke-width="7" stroke-linecap="round"/>
+        <path class="logo-string" d="M21 48 49 20" fill="none" stroke-width="2.5" stroke-linecap="round"/>
+        <path class="logo-wire" d="M17 35 36 16M27 50 50 27" fill="none" stroke-width="2" stroke-linecap="round" opacity=".9"/>
+      </svg>
+      <span class="brand-word">Shredmaster</span>
+    </button>
     <button class="icon" id="nextBtn" aria-label="Next">&gt;</button>
   </header>
   <main id="app"></main>
@@ -650,6 +870,118 @@ function makeScaleLesson(id,title,modes=majorModeShapes,shapeHeading="Scale Shap
     ]
   }]};
 }
+function techShape(name,rows,startFret=5){
+  return {name,startFret,notes:rows.flatMap(([s,frets])=>frets.map(f=>({s,f,n:""})))};
+}
+function singleStringShape(name,stringNumber=6,frets=[5,6,7,8],startFret=5){
+  return techShape(name,[[stringNumber,frets]],startFret);
+}
+function sameFretShape(name,strings=[6,5,4,3,2,1],fret=5){
+  return techShape(name,strings.map(s=>[s,[fret]]),fret);
+}
+function techStepNote(step){
+  return {s:step[0],f:step[1],n:""};
+}
+function timedShape(name,steps,startFret=5){
+  return {name,startFret,notes:steps.map(step=>Array.isArray(step[0])?step.map(techStepNote):techStepNote(step))};
+}
+function repeatItems(items,times=1){
+  return Array.from({length:times},()=>items).flat();
+}
+function stringSteps(stringNumber,frets){
+  return frets.map(f=>[stringNumber,f]);
+}
+function sameFretSteps(strings=[6,5,4,3,2,1],fret=5){
+  return strings.map(s=>[s,fret]);
+}
+function rowSteps(rows){
+  return rows.flatMap(([s,frets])=>frets.map(f=>[s,f]));
+}
+const technicalExerciseSections=[
+  {
+    title:"Left-Hand Dexterity",
+    focus:"Finger independence, pressure control, clean shifts",
+    exercises:[
+      {name:"Chromatic Crawl",tempo:"60-160",pattern:"1 2 3 4 / 4 3 2 1",moves:repeatItems(["1","2","3","4"],6).concat(repeatItems(["4","3","2","1"],6)),note:"One finger per fret. Keep old fingers down until the next string change.",diagram:timedShape("Chromatic crawl",rowSteps([[6,[5,6,7,8]],[5,[5,6,7,8]],[4,[5,6,7,8]],[3,[5,6,7,8]],[2,[5,6,7,8]],[1,[5,6,7,8]]]).concat(rowSteps([[1,[8,7,6,5]],[2,[8,7,6,5]],[3,[8,7,6,5]],[4,[8,7,6,5]],[5,[8,7,6,5]],[6,[8,7,6,5]]])))},
+      {name:"Spider Split",tempo:"50-130",pattern:"1 3 2 4",moves:repeatItems(["1","3","2","4"],5),note:"Move non-adjacent fingers without squeezing the thumb.",diagram:timedShape("Spider split",[[6,5],[6,7],[5,6],[5,8],[5,5],[5,7],[4,6],[4,8],[4,5],[4,7],[3,6],[3,8],[3,5],[3,7],[2,6],[2,8],[2,5],[2,7],[1,6],[1,8]])},
+      {name:"Permutation Grid",tempo:"55-150",pattern:"1324 1423 2413 3142",moves:["1","3","2","4","1","4","2","3","2","4","1","3","3","1","4","2"],note:"Run each permutation on every string before shifting position.",diagram:timedShape("Permutation grid",[[3,5],[3,7],[3,6],[3,8],[3,5],[3,8],[3,6],[3,7],[3,6],[3,8],[3,5],[3,7],[3,7],[3,5],[3,8],[3,6]])},
+      {name:"Finger Lock",tempo:"40-90",pattern:"hold 1+4, move 2+3",moves:["1hld","4hld","2","3","2","3","1hld","4hld"],note:"Anchor index and pinky lightly while the middle pair moves.",diagram:timedShape("Finger lock",[[4,5],[4,8],[3,6],[3,7],[2,6],[2,7],[4,5],[4,8]])},
+      {name:"Diagonal Crawl",tempo:"55-140",pattern:"6:1 5:2 4:3 3:4",moves:["6/1","5/2","4/3","3/4","2/1","1/2"],note:"Each string change also changes finger number. No collapsing knuckles.",diagram:techShape("Diagonal crawl",[[6,[5]],[5,[6]],[4,[7]],[3,[8]],[2,[5]],[1,[6]]])},
+      {name:"Wide Reach",tempo:"45-110",pattern:"1 2 3 4 stretch",moves:["1","2","3","4","3","2","1"],note:"Use a relaxed wrist. Stop if the stretch feels sharp or forced.",diagram:timedShape("Wide reach",stringSteps(2,[5,7,8,10,8,7,5]))},
+      {name:"Position Shift Cell",tempo:"60-150",pattern:"1234 -> 2345",moves:repeatItems(["1","2","3","4"],2),note:"Shift by one fret without changing hand shape.",diagram:timedShape("Position shift",stringSteps(1,[5,6,7,8,6,7,8,9]))},
+      {name:"String Hop Spider",tempo:"50-120",pattern:"6-4-5-3-4-2",moves:["6","4","5","3","4","2"],note:"Left hand lands first; right hand follows quietly.",diagram:techShape("String hop spider",[[6,[5]],[4,[6]],[5,[7]],[3,[8]],[4,[5]],[2,[6]]])}
+    ]
+  },
+  {
+    title:"Right-Hand Dexterity",
+    focus:"Alternate picking, string crossing, accents, hand relaxation",
+    exercises:[
+      {name:"Single String Engine",tempo:"70-190",pattern:"D U D U",moves:["D","U","D","U","D","U","D","U"],note:"Tiny pick path. Same volume on downstroke and upstroke.",diagram:singleStringShape("Single string engine",3,[5])},
+      {name:"String Crossing Ladder",tempo:"60-170",pattern:"6 5 4 3 2 1 2 3",moves:["6","5","4","3","2","1","2","3"],note:"Move from the arm, not by twisting the wrist.",diagram:timedShape("String crossing ladder",sameFretSteps([6,5,4,3,2,1,2,3],5))},
+      {name:"Inside Picking",tempo:"55-150",pattern:"U on lower, D on higher",moves:["U","D","U","D","U","D"],note:"Pick strokes travel toward the space between the strings.",diagram:timedShape("Inside picking",[[4,5],[3,5],[4,7],[3,7],[4,5],[3,5]])},
+      {name:"Outside Picking",tempo:"55-150",pattern:"D on lower, U on higher",moves:["D","U","D","U","D","U"],note:"Pick strokes travel outside the string pair. Keep it compact.",diagram:timedShape("Outside picking",[[5,5],[4,5],[5,7],[4,7],[5,5],[4,5]])},
+      {name:"Tremolo Bursts",tempo:"80-210",pattern:"4 fast + 4 rest",moves:["D","U","D","U","rest","rest","rest","rest"],note:"Speed only during the burst. Reset the hand on the rests.",diagram:singleStringShape("Tremolo bursts",1,[5])},
+      {name:"Accent Rail",tempo:"60-170",pattern:"> 2 3 4 / > 2 3 4",moves:[">","2","3","4",">","2","3","4"],accent:[0,4],note:"Accent without changing tempo or pick depth.",diagram:timedShape("Accent rail",stringSteps(2,[5,6,7,8,5,6,7,8]))},
+      {name:"Economy Awareness",tempo:"55-150",pattern:"D D U / U U D",moves:["D","D","U","U","U","D"],note:"Let directional string changes fall through the next string.",diagram:timedShape("Economy awareness",[[6,5],[5,5],[5,7],[4,7],[5,7],[5,5]])},
+      {name:"Skipped String Engine",tempo:"50-135",pattern:"6 4 5 3 4 2",moves:["6","4","5","3","4","2"],note:"Mute unused strings with both hands before adding speed.",diagram:techShape("Skipped string engine",[[6,[5]],[4,[5]],[5,[7]],[3,[7]],[4,[8]],[2,[8]]])}
+    ]
+  },
+  {
+    title:"Legato Control",
+    focus:"Hammer-ons, pull-offs, trills, even note volume",
+    exercises:[
+      {name:"Hammer Pair",tempo:"50-130",pattern:"5h7 5h7",moves:["pick","h","pick","h"],note:"The hammer must sound nearly as loud as the picked note.",diagram:timedShape("Hammer pair",stringSteps(3,[5,7,5,7]))},
+      {name:"Pull-Off Pair",tempo:"50-130",pattern:"8p5 8p5",moves:["pick","p","pick","p"],note:"Pull slightly sideways so the lower note speaks clearly.",diagram:timedShape("Pull off pair",stringSteps(2,[8,5,8,5]))},
+      {name:"Three-Note Slur",tempo:"55-150",pattern:"5h7p5 5h7p5",moves:["pick","h","p","pick","h","p"],note:"Make the middle note match the first note in time and volume.",diagram:timedShape("Three note slur",stringSteps(1,[5,7,5,5,7,5]))},
+      {name:"Four-Finger Hammer",tempo:"45-115",pattern:"5h6h7h8",moves:["pick","h","h","h"],note:"No extra pick strokes after the first note.",diagram:timedShape("Four finger hammer",stringSteps(4,[5,6,7,8]))},
+      {name:"Trill Endurance",tempo:"40-110",pattern:"5h8p5 repeat",moves:["pick","h","p","h","p","h","p","h"],note:"Stay loose for 20 seconds, then rest for 20 seconds.",diagram:timedShape("Trill endurance",stringSteps(1,[5,8,5,8,5,8,5,8]))},
+      {name:"Legato Shift",tempo:"50-130",pattern:"5h7 / 6h8 / 7h9 / 8h10",moves:repeatItems(["pick","h"],4),note:"Shift after the pull-off, not during it.",diagram:timedShape("Legato shift",[[3,5],[3,7],[2,6],[2,8],[1,7],[1,9],[1,8],[1,10]])},
+      {name:"Rolling Slur",tempo:"45-120",pattern:"5h6p5 7h8p7",moves:["pick","h","p","pick","h","p"],note:"Keep the idle fingers close to the string.",diagram:timedShape("Rolling slur",stringSteps(2,[5,6,5,7,8,7]))},
+      {name:"All-String Legato",tempo:"45-120",pattern:"5h7p5 on every string",moves:repeatItems(["pick","h","p"],6),note:"Same slur shape on each string; adjust force for string thickness.",diagram:timedShape("All string legato",rowSteps([[6,[5,7,5]],[5,[5,7,5]],[4,[5,7,5]],[3,[5,7,5]],[2,[5,7,5]],[1,[5,7,5]]]))}
+    ]
+  },
+  {
+    title:"Slap and Double Thumping",
+    focus:"Percussive guitar, thumb down/up, pop control",
+    exercises:[
+      {name:"Thumb Slap Pulse",tempo:"55-130",pattern:"T x T x",moves:["T","x","T","x","T","x"],note:"Strike near the end of the fretboard and immediately relax.",diagram:timedShape("Thumb slap pulse",[[6,5],[6,5],[5,5],[5,5],[4,5],[4,5]])},
+      {name:"Slap Pop Octave",tempo:"55-135",pattern:"T P T P",moves:["T","P","T","P","T","P"],note:"Thumb hits the bass note; index or middle pops the upper string.",diagram:timedShape("Slap pop octave",[[6,5],[4,7],[5,5],[3,7],[6,5],[4,7]])},
+      {name:"Left-Hand Slap",tempo:"45-115",pattern:"LH x x note",moves:["LH","x","x","note"],note:"Use the fretting hand to create the muted percussive hit.",diagram:timedShape("Left hand slap",[[6,5],[6,5],[5,5],[4,7]])},
+      {name:"Ghost Groove",tempo:"60-145",pattern:"T x P x",moves:["T","x","P","x","T","x","P","x"],note:"The muted notes must be as timed as the pitched notes.",diagram:timedShape("Ghost groove",[[6,5],[6,5],[3,7],[3,7],[6,5],[6,5],[3,7],[3,7]])},
+      {name:"Double Thumb Basics",tempo:"45-120",pattern:"Tdn Tup",moves:["Tdn","Tup","Tdn","Tup"],note:"Thumb passes through the string on the downstroke, then catches upward.",diagram:singleStringShape("Double thumb basics",5,[5])},
+      {name:"Double Thumb Triplet",tempo:"45-125",pattern:"Tdn Tup P",moves:["Tdn","Tup","P","Tdn","Tup","P"],note:"Even triplets before speed. Pop should not jump louder than thumb.",diagram:timedShape("Double thumb triplet",[[5,5],[5,5],[3,7],[5,5],[5,5],[3,7]])},
+      {name:"Thump Transfer",tempo:"40-110",pattern:"6:Tdn 5:Tup 4:P",moves:["Tdn","Tup","P"],note:"Move the double-thumb motion across adjacent strings.",diagram:techShape("Thump transfer",[[6,[5]],[5,[5]],[4,[7]]])},
+      {name:"Slap Hammer Groove",tempo:"50-125",pattern:"T h P x",moves:["T","h","P","x","T","h","P","x"],note:"After the slap, hammer the fretted note without another right-hand hit.",diagram:timedShape("Slap hammer groove",[[6,5],[6,7],[3,7],[3,7],[6,5],[6,7],[3,7],[3,7]])}
+    ]
+  },
+  {
+    title:"Two-Hand Tapping",
+    focus:"Tap attack, pull-off clarity, muting, hand synchronization",
+    exercises:[
+      {name:"Basic Tap Cell",tempo:"50-140",pattern:"T12 p8 p5",moves:["T12","p8","p5","T12","p8","p5"],note:"Tap hard enough to sound, then pull off with a tiny pluck.",diagram:timedShape("Basic tap cell",stringSteps(1,[12,8,5,12,8,5]),5)},
+      {name:"Tap Across Strings",tempo:"45-120",pattern:"T12p8p5 on 1-2-3",moves:repeatItems(["T12","p8","p5"],3),note:"Mute lower strings with the picking-hand palm.",diagram:timedShape("Tap across strings",rowSteps([[1,[12,8,5]],[2,[12,8,5]],[3,[12,8,5]]]),5)},
+      {name:"Tapped Arpeggio",tempo:"45-120",pattern:"5h8 T12 across strings",moves:["5","h8","T12","5","h8","T12","4","h7","T12"],note:"Keep the fretting hand ready before the tap lands.",diagram:timedShape("Tapped arpeggio",[[1,5],[1,8],[1,12],[2,5],[2,8],[2,12],[3,4],[3,7],[3,12]],4)},
+      {name:"Two-Finger Tap",tempo:"40-105",pattern:"T12 T15 p12 p8",moves:["T12","T15","p12","p8"],note:"Use two tapping fingers only after the single tap is even.",diagram:timedShape("Two finger tap",stringSteps(1,[12,15,12,8]),8)},
+      {name:"Pedal Tap",tempo:"55-145",pattern:"T12 p7 T12 p8 T12 p10",moves:["T12","p7","T12","p8","T12","p10"],note:"Tapped note stays constant while the fretting hand moves.",diagram:timedShape("Pedal tap",stringSteps(2,[12,7,12,8,12,10]),7)},
+      {name:"Tap Slide",tempo:"40-105",pattern:"T12/14 p8 p5",moves:["T12","/14","p8","p5"],note:"Slide with the tapping finger, then release cleanly.",diagram:timedShape("Tap slide",stringSteps(1,[12,14,8,5]),5)},
+      {name:"Tapped Sequence",tempo:"45-120",pattern:"5 8 T12 / 7 10 T14",moves:["5","8","T12","7","10","T14"],note:"Move the fretting-hand pair and tapping note together.",diagram:techShape("Tapped sequence",[[1,[5,8,12]],[2,[7,10,14]]],5)}
+    ]
+  },
+  {
+    title:"Fingerpicking",
+    focus:"Thumb independence, PIMA control, Travis and rolls",
+    exercises:[
+      {name:"PIMA Roll",tempo:"55-140",pattern:"P I M A M I",moves:["P","I","M","A","M","I"],note:"Let each finger return to ready position after playing.",diagram:timedShape("PIMA roll",sameFretSteps([5,3,2,1,2,3],5))},
+      {name:"Travis Engine",tempo:"55-135",pattern:"P6 I3 P4 M2",moves:["P6","I3","P4","M2"],note:"Thumb keeps alternating bass while fingers stay light.",diagram:timedShape("Travis engine",sameFretSteps([6,3,4,2],5))},
+      {name:"Pinch and Roll",tempo:"50-125",pattern:"P+A I M A",moves:["P+A","I","M","A"],note:"Pinch lands together, then the roll stays even.",diagram:timedShape("Pinch and roll",[[[5,5],[1,5]],[3,5],[2,5],[1,5]])},
+      {name:"Inside-Outside",tempo:"55-135",pattern:"P I P M",moves:["P","I","P","M"],note:"Bass alternates while fingers alternate inner and outer treble strings.",diagram:sameFretShape("Inside outside",[6,3,4,2],5)},
+      {name:"Outside-Inside",tempo:"55-135",pattern:"P M P I",moves:["P","M","P","I"],note:"Reverse the treble order without losing the thumb pulse.",diagram:sameFretShape("Outside inside",[6,2,4,3],5)},
+      {name:"Thumb Independence",tempo:"50-125",pattern:"6 4 5 4 + I/M",moves:["P6","P4","P5","P4","I","M"],note:"Thumb is the drummer. Fingers enter without disturbing it.",diagram:timedShape("Thumb independence",sameFretSteps([6,4,5,4,3,2],5))},
+      {name:"3-Over-2 Roll",tempo:"45-110",pattern:"P I M / P M I",moves:["P","I","M","P","M","I"],note:"Count the hand pattern against two bass pulses.",diagram:sameFretShape("Three over two roll",[5,3,2,4,2,3],5)},
+      {name:"Alternating Bass Melody",tempo:"45-120",pattern:"P bass + A melody",moves:["P6","A1","P4","M2","P5","A1"],note:"Keep the melody note on top without crushing the bass.",diagram:timedShape("Alternating bass melody",sameFretSteps([6,1,4,2,5,1],5))}
+    ]
+  }
+];
 
 const lessons=[
   makeScaleLesson(1,"Modes of Major Scale",majorModeShapes,"Modes"),
@@ -661,7 +993,8 @@ const lessons=[
   {id:"7",title:"Drop 2",category:"Voicings",targetBpm:60,visualType:"voicing",pages:[{heading:"All Inversions",body:"All Drop 2 qualities grouped by inversion.",cards:makeDrop2Cards()}]},
   {id:"8",title:"Drop 3",category:"Voicings",targetBpm:60,visualType:"voicing",pages:[{heading:"All Inversions",body:"All Drop 3 qualities grouped by inversion.",cards:makeDrop3Cards()}]},
   {id:"9",title:"Arpeggios - All",category:"Arpeggios",targetBpm:70,visualType:"arpeggio",pages:[{heading:"All Chord Qualities",body:"All chord tones inside one position, with roots on E and A strings.",cards:makeArpeggioCards()}]},
-  {id:"10",title:"Sus and Quartal Chords",category:"Chords",targetBpm:60,visualType:"chordGrid",pages:[{heading:"4-Note Grips",body:"Playable suspended and quartal chord grips on E and A string roots.",cards:makeSusQuartalCards()}]}
+  {id:"10",title:"Sus and Quartal Chords",category:"Chords",targetBpm:60,visualType:"chordGrid",pages:[{heading:"4-Note Grips",body:"Playable suspended and quartal chord grips on E and A string roots.",cards:makeSusQuartalCards()}]},
+  {id:"11",title:"Technical Exercises",category:"Technique",targetBpm:60,visualType:"technique",pages:[{heading:"Rhythmic TAB Lines",body:"Left hand, right hand, slap, double thumping, tapping, and fingerpicking drills as timed TAB notation.",sections:technicalExerciseSections}]}
 ];
 
 const shapeTabs=[
@@ -754,9 +1087,27 @@ function renderHome(){
   const p=getProgress();
   const completed=lessons.filter(lesson=>p[lesson.id]?.completed).length;
   app.innerHTML=`<section class="hero">
-    <div class="meta">${completed} of ${lessons.length} lessons completed</div>
-    <h1>Shredmasster</h1>
-    <p class="subtle">Precision, tension, and beautiful mistakes. Train slow. Play brutal.</p>
+    <div class="hero-lockup">
+      <div class="hero-main">
+        <svg class="logo-svg hero-logo" viewBox="0 0 64 64" aria-hidden="true">
+          <path class="logo-shell" d="M32 6c14 11 22 24 21 37-.8 12-10 18-21 14-11 4-20-2-21-14C10 30 18 17 32 6Z"/>
+          <path class="logo-core" d="M32 11c11 10 17 20 16 31-.6 8-7 12-16 9-9 3-15-1-16-9-1-11 5-21 16-31Z"/>
+          <path class="logo-slash" d="M18 45 46 17" fill="none" stroke-width="7" stroke-linecap="round"/>
+          <path class="logo-string" d="M21 48 49 20" fill="none" stroke-width="2.5" stroke-linecap="round"/>
+          <path class="logo-wire" d="M17 35 36 16M27 50 50 27" fill="none" stroke-width="2" stroke-linecap="round" opacity=".9"/>
+        </svg>
+        <div class="hero-copy">
+          <div class="meta">${completed} of ${lessons.length} lessons completed</div>
+          <h1>Shredmaster</h1>
+          <p class="subtle">Precision practice for scales, grips, voicings, and time.</p>
+        </div>
+      </div>
+      <div class="hero-stats">
+        <div class="hero-stat"><strong>${lessons.length}</strong><span>Lessons</span></div>
+        <div class="hero-stat"><strong>${completed}</strong><span>Done</span></div>
+        <div class="hero-stat"><strong>${bpmInput.value}</strong><span>BPM</span></div>
+      </div>
+    </div>
   </section>
   <section class="lesson-grid">${lessons.map((lesson,index)=>{
     const saved=p[lesson.id]||{},done=saved.completed,best=saved.bestBpm?`Best ${saved.bestBpm} BPM`:`Target ${lesson.targetBpm} BPM`;
@@ -901,8 +1252,8 @@ function renderMiniFretboard(shape){
   const minFret=Math.max(0,Math.min(...shape.notes.map(note=>note.f)));
   const maxFret=Math.max(...shape.notes.map(note=>note.f))+fretShift;
   const start=shape.startFret??Math.max(0,minFret-1);
-  const fretsShown=Math.max(5,Math.min(8,maxFret-start+2));
-  const width=280,height=128,left=34,top=18,stringGap=16,fretGap=28;
+  const fretsShown=Math.max(5,maxFret-start+2);
+  const height=128,left=34,top=18,stringGap=16,fretGap=28,width=left+fretsShown*fretGap+22;
   const stringLines=[1,2,3,4,5,6].map((s,i)=>`<line x1="${left}" y1="${top+i*stringGap}" x2="${left+fretsShown*fretGap}" y2="${top+i*stringGap}" stroke="#6f7b82" stroke-width="${1+i*.18}"/>`).join("");
   const fretLines=Array.from({length:fretsShown+1},(_,i)=>`<line x1="${left+i*fretGap}" y1="${top}" x2="${left+i*fretGap}" y2="${top+stringGap*5}" stroke="#4e5960" stroke-width="${i===0?2:1}"/>`).join("");
   const dots=shape.notes.map(note=>{
@@ -960,10 +1311,9 @@ function renderScalarLesson(page){
       <div class="scale-board-list">${page.modes.map(mode=>{
         const shape=mode.shape||modeShapes3Nps[mode.shapeIndex];
         const root=mode.root||shape.root||mode.mode.split(" ")[0];
-        const chord=mode.chord?`<span>${html(mode.chord)}</span>`:"";
-        const shapeLabel=mode.mode===shape.name?"":`<span>${html(shape.name)}</span>`;
+        const chord=mode.chord?`<span class="scale-chord">${html(mode.chord)}</span>`:"";
         return `<div class="scale-board">
-        <div class="scale-board-title"><strong>${html(mode.mode)}${chord}</strong>${shapeLabel}</div>
+        <div class="scale-board-title"><strong><span class="scale-name">${html(mode.mode)}</span>${chord}</strong></div>
         <div class="fretboard-wrap">${renderFretboard(shape,root,false)}</div>
       </div>`;
       }).join("")}</div>
@@ -984,6 +1334,148 @@ function renderScalarLesson(page){
     </section>
   </div>`;
 }
+function renderMoveCells(moves=[],accent=[]){
+  const accentSet=new Set(accent||[]);
+  return `<div class="movement-code">${moves.map((move,index)=>`<span class="move-cell ${accentSet.has(index)?'accent':''}">${html(move)}</span>`).join("")}</div>`;
+}
+function stringNameFromNumber(value){
+  return ({1:"e",2:"B",3:"G",4:"D",5:"A",6:"E"})[value]||String(value);
+}
+function chunk(items,size){
+  return Array.from({length:Math.ceil(items.length/size)},(_,index)=>items.slice(index*size,index*size+size));
+}
+function buildTechniqueSteps(exercise){
+  const notes=exercise.diagram?.notes||[];
+  const moves=exercise.moves||[];
+  if(!notes.length)return [];
+  const count=Math.max(notes.length,moves.length||0);
+  return Array.from({length:count},(_,index)=>{
+    const move=moves[index]||moves[index%moves.length]||String(index+1);
+    const isRest=/^rest$/i.test(move);
+    return {index,move,isRest,note:isRest?null:notes[index%notes.length]};
+  });
+}
+function techniqueFocusForSection(sectionTitle=""){
+  const title=String(sectionTitle);
+  if(title.includes("Left-Hand"))return "Finger lands just behind the fret; keep the thumb light and release pressure after each note.";
+  if(title.includes("Right-Hand"))return "Pick motion stays small. Downstrokes and upstrokes should have the same volume.";
+  if(title.includes("Legato"))return "Only pick the first note of each cell. Hammer-ons and pull-offs must match the picked note.";
+  if(title.includes("Slap"))return "Muted hits count as real beats. Keep slap, pop, and ghost notes the same distance apart.";
+  if(title.includes("Tapping"))return "Tap with authority, pull off with a small pluck, and mute unused strings before adding speed.";
+  if(title.includes("Fingerpicking"))return "Thumb stays as the metronome while the fingers drop in without changing the pulse.";
+  return "Keep every movement locked to the click and stop when tension starts to build.";
+}
+function notationSymbol(move=""){
+  const value=String(move);
+  if(/^rest$/i.test(value))return "rest";
+  if(value===">")return ">";
+  if(/^Tup$/i.test(value)||/^U$/i.test(value))return "^";
+  if(/^Tdn$/i.test(value)||/^D$/i.test(value))return "v";
+  if(/^x$/i.test(value))return "x";
+  if(/^pick$/i.test(value))return "p";
+  return value.length>5?value.slice(0,5):value;
+}
+function renderNotationBoard(exercise){
+  const steps=buildTechniqueSteps(exercise);
+  if(!steps.length)return "";
+  const systems=chunk(steps,24);
+  const cellW=34,lineGap=14,staffLeft=44,staffTop=30,staffHeight=lineGap*5,beamDrop=34;
+  const paper="#050607",ink="#f3f5f4",muted="#9aa6aa";
+  const maxSteps=Math.max(...systems.map(system=>system.length));
+  const width=Math.max(760,staffLeft+maxSteps*cellW+18);
+  const systemH=staffHeight+beamDrop+70;
+  const height=systems.length*systemH+20;
+  const stringLabels=["e","B","G","D","A","E"];
+  const systemSvgs=systems.map((system,systemIndex)=>{
+    const y0=staffTop+systemIndex*systemH;
+    const x0=staffLeft;
+    const xEnd=x0+system.length*cellW;
+    const lines=stringLabels.map((label,index)=>{
+      const y=y0+index*lineGap;
+      return `<text x="${x0-24}" y="${y+4}" fill="${muted}" font-size="10" font-family="SFMono-Regular, Courier New">${label}</text><line x1="${x0}" y1="${y}" x2="${xEnd}" y2="${y}" stroke="${ink}" stroke-width="1.35"/>`;
+    }).join("");
+    const grid=Array.from({length:system.length+1},(_,index)=>{
+      const x=x0+index*cellW;
+      const strong=index===0||index===system.length||index%8===0;
+      return `<line x1="${x}" y1="${y0-lineGap*.55}" x2="${x}" y2="${y0+staffHeight}" stroke="${ink}" stroke-width="${strong?2.2:1}"/>`;
+    }).join("");
+    const frets=system.map((step,index)=>{
+      const x=x0+index*cellW+cellW/2;
+      const stepNotes=Array.isArray(step.note)?step.note:(step.note?[step.note]:[]);
+      if(!stepNotes.length){
+        const y=y0-lineGap;
+        return `<rect x="${x-10}" y="${y-11}" width="20" height="15" fill="${paper}"/><text x="${x}" y="${y+1}" text-anchor="middle" fill="${ink}" font-size="15" font-family="SFMono-Regular, Courier New">x</text>`;
+      }
+      const isMuted=/^x$/i.test(step.move);
+      return stepNotes.map(note=>{
+        const y=y0+(note.s-1)*lineGap;
+        const value=isMuted?"x":note.f;
+        return `<rect x="${x-10}" y="${y-11}" width="20" height="15" fill="${paper}"/><text x="${x}" y="${y+1}" text-anchor="middle" fill="${ink}" font-size="15" font-family="SFMono-Regular, Courier New">${html(value)}</text>`;
+      }).join("");
+    }).join("");
+    const beams=Array.from({length:Math.ceil(system.length/4)},(_,groupIndex)=>{
+      const count=Math.min(4,system.length-groupIndex*4);
+      if(count<2)return "";
+      const startX=x0+groupIndex*4*cellW;
+      const endX=startX+(count-1)*cellW;
+      const stemTop=y0+staffHeight+6;
+      const stemBottom=y0+staffHeight+beamDrop;
+      const stems=Array.from({length:count},(_,index)=>{
+        const x=startX+index*cellW+cellW/2;
+        return `<line x1="${x}" y1="${stemTop}" x2="${x}" y2="${stemBottom}" stroke="${ink}" stroke-width="1.35"/>`;
+      }).join("");
+      return `${stems}<line x1="${startX+cellW/2}" y1="${stemBottom}" x2="${endX+cellW/2}" y2="${stemBottom}" stroke="${ink}" stroke-width="4"/>`;
+    }).join("");
+    const motions=system.map((step,index)=>{
+      const x=x0+index*cellW+cellW/2;
+      const y=y0+staffHeight+beamDrop+28;
+      const symbol=notationSymbol(step.move);
+      const fontSize=symbol.length>4?9:symbol.length>2?11:15;
+      return `<text x="${x}" y="${y}" text-anchor="middle" fill="${ink}" font-size="${fontSize}" font-family="SFMono-Regular, Courier New">${html(symbol)}</text>`;
+    }).join("");
+    const endBar=systemIndex===systems.length-1?`<line x1="${xEnd-4}" y1="${y0-lineGap*.55}" x2="${xEnd-4}" y2="${y0+staffHeight}" stroke="${ink}" stroke-width="1.5"/><line x1="${xEnd}" y1="${y0-lineGap*.55}" x2="${xEnd}" y2="${y0+staffHeight}" stroke="${ink}" stroke-width="4"/>`:"";
+    return `${lines}${grid}${endBar}${frets}${beams}${motions}`;
+  }).join("");
+  return `<div class="notation-board"><svg width="${width}" height="${height}" viewBox="0 0 ${width} ${height}" role="img" aria-label="${html(exercise.name)} rhythmic TAB notation"><rect x="0" y="0" width="${width}" height="${height}" fill="${paper}"/>${systemSvgs}</svg></div>`;
+}
+function renderExerciseInfo(exercise,sectionTitle){
+  const steps=buildTechniqueSteps(exercise);
+  const notes=steps.flatMap(step=>Array.isArray(step.note)?step.note:(step.note?[step.note]:[])).filter(note=>Number.isFinite(Number(note.f)));
+  const frets=notes.map(note=>Number(note.f));
+  const minFret=frets.length?Math.min(...frets):0;
+  const maxFret=frets.length?Math.max(...frets):0;
+  const span=frets.length?`${minFret}-${maxFret}`:"open";
+  const items=[
+    ["Loop",`${steps.length||1} timed steps. Play one step per click, then repeat without pausing.`],
+    ["Focus",techniqueFocusForSection(sectionTitle)],
+    ["Level Up",`When you can play 3 clean loops at ${exercise.tempo} BPM range, raise the metronome by 5 BPM.`],
+    ["Map",`Position around frets ${span}. Read the notation left to right; each fret number is one timed attack.`]
+  ];
+  return `<div class="exercise-info">${items.map(([label,text])=>`<div class="exercise-info-item"><strong>${html(label)}</strong><span>${html(text)}</span></div>`).join("")}</div>`;
+}
+function renderTechniqueExercise(exercise,sectionTitle=""){
+  return `<article class="exercise-card">
+    <div>
+      <strong>${html(exercise.name)}</strong>
+      <div class="exercise-meta">
+        <span class="tech-tag">${html(exercise.tempo)} BPM</span>
+        <span class="tech-tag">${html(exercise.pattern)}</span>
+      </div>
+    </div>
+    ${renderNotationBoard(exercise)}
+    <p class="exercise-note">${html(exercise.note||"")}</p>
+    ${renderExerciseInfo(exercise,sectionTitle)}
+  </article>`;
+}
+function renderTechniqueLesson(page){
+  return `<div class="tech-stack">${(page.sections||[]).map(section=>`<section class="tech-section">
+    <div class="tech-section-head">
+      <h3>${html(section.title)}</h3>
+      <div class="meta">${html(section.focus||"")}</div>
+    </div>
+    <div class="tech-grid">${(section.exercises||[]).map(exercise=>renderTechniqueExercise(exercise,section.title)).join("")}</div>
+  </section>`).join("")}</div>`;
+}
 function renderVisualLesson(page,type){
   if(type==="sequence"||type==="interval")return `<section class="card"><h3>${type==="sequence"?"Pattern":"Interval Map"}</h3>${renderDegreeStrip(page.degrees||[])}<div class="tab-box" style="margin-top:12px"><pre>${html(page.formula||"")}</pre></div></section>`;
   if(["chordGrid","stringSets","voicing","arpeggio"].includes(type))return `<section class="card"><h3>${type==="voicing"?"Voicing Blocks":type==="arpeggio"?"Arpeggio Blocks":"Diagram Blocks"}</h3>${renderCards(page.cards||[],type)}</section>`;
@@ -998,11 +1490,15 @@ function renderLesson(){
     app.innerHTML=`<section class="card"><div class="meta">Lesson ${lesson.id} - ${html(lesson.category)}</div><h1>${html(lesson.title)}</h1><p>${html(page.body)}</p></section><div class="content-grid"><div>${renderScalarLesson(page)}</div><div>${renderProgressBlock(saved)}</div></div>`;
     return;
   }
+  if(lesson.visualType==="technique"){
+    app.innerHTML=`<section class="card"><div class="meta">Lesson ${lesson.id} - ${html(lesson.category)}</div><h1>${html(lesson.title)}</h1><h2>${html(page.heading)}</h2><p>${html(page.body)}</p></section><div class="content-grid"><div>${renderTechniqueLesson(page)}</div><div>${renderProgressBlock(saved)}</div></div>`;
+    return;
+  }
   if(lesson.visualType==="mode3nps"){
     currentShapeIndex=page.shapeIndex;
     const shape=modeShapes3Nps[currentShapeIndex];
     app.innerHTML=`<section class="card toolbar"><div><div class="meta">Lesson ${lesson.id} - ${html(lesson.category)} - Page ${currentPageIndex+1} of ${lesson.pages.length}</div><h1>${html(page.mode)}</h1><div class="pill-row"><span class="pill">Formula: ${html(page.formula)}</span><span class="pill">Character: ${html(page.character)}</span><span class="pill">Sound: ${html(page.sound)}</span></div></div></section>
-    <div class="content-grid"><div><section class="card"><h3>3 Notes Per String</h3><div class="fretboard-controls"><button class="icon" onclick="previousShape()">&lt;</button><strong class="shape-title">${html(shape.name)} - Fret ${shape.startFret}</strong><button class="icon" onclick="nextShape()">&gt;</button></div><div class="fretboard-wrap">${renderFretboard(shape,page.root,false)}</div></section><section class="card"><h3>Tab</h3><div class="tab-box"><pre>${html(shape.tab)}</pre></div></section></div><div>${renderProgressBlock(saved)}</div></div>`;
+    <div class="content-grid"><div><section class="card"><h3>3 Notes Per String</h3><div class="fretboard-controls"><button class="icon" onclick="previousShape()">&lt;</button><strong class="shape-title">Fret ${shape.startFret}</strong><button class="icon" onclick="nextShape()">&gt;</button></div><div class="fretboard-wrap">${renderFretboard(shape,page.root,false)}</div></section><section class="card"><h3>Tab</h3><div class="tab-box"><pre>${html(shape.tab)}</pre></div></section></div><div>${renderProgressBlock(saved)}</div></div>`;
     return;
   }
   app.innerHTML=`<section class="card"><div class="meta">Lesson ${lesson.id} - ${html(lesson.category)} - Page ${currentPageIndex+1} of ${lesson.pages.length}</div><h1>${html(lesson.title)}</h1><h2>${html(page.heading)}</h2><p>${html(page.body)}</p><div class="pill-row">${page.formula?`<span class="pill">${html(page.formula)}</span>`:""}${page.interval?`<span class="pill">Interval: ${html(page.interval)}</span>`:""}</div></section><div class="content-grid"><div>${renderVisualLesson(page,lesson.visualType)}</div><div>${renderProgressBlock(saved)}</div></div>`;
