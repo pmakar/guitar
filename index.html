@@ -721,13 +721,13 @@ function syncBpm(value){
   }
   if(isPlaying){stopMetronome();if(bpm>0)startMetronome()}
 }
-function clickSound(accent=false){
+function clickSound(){
   if(!audioContext)return;
   const osc=audioContext.createOscillator(),gain=audioContext.createGain();
   osc.type="square";
-  osc.frequency.value=accent?1400:940;
+  osc.frequency.value=940;
   gain.gain.setValueAtTime(.001,audioContext.currentTime);
-  gain.gain.linearRampToValueAtTime(.32,audioContext.currentTime+.003);
+  gain.gain.linearRampToValueAtTime(1,audioContext.currentTime+.003);
   gain.gain.exponentialRampToValueAtTime(.001,audioContext.currentTime+.05);
   osc.connect(gain);
   gain.connect(audioContext.destination);
@@ -742,10 +742,9 @@ async function startMetronome(){
   if(bpmValue<=0){stopMetronome();return}
   isPlaying=true;
   metroToggle.textContent="Stop";
-  let beat=0;
-  clickSound(true);
+  clickSound();
   clearInterval(timerId);
-  timerId=setInterval(()=>{beat=(beat+1)%4;clickSound(beat===0)},60000/bpmValue);
+  timerId=setInterval(()=>clickSound(),60000/bpmValue);
 }
 function stopMetronome(){isPlaying=false;metroToggle.textContent="Start";clearInterval(timerId);timerId=null}
 
