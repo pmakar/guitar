@@ -1,6 +1,6 @@
-# Shredmasster
+# Shredmaster
 
-A single-page guitar practice app for scale fingerings, sequences, intervals, chords, voicings, arpeggios, notes, and metronome practice.
+A single-page guitar practice app for scale fingerings, sequences, intervals, chords, voicings, arpeggios, technical exercises, notes, and metronome practice.
 
 ## Open Locally
 

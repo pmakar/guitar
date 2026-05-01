@@ -3,8 +3,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>Shredmaster</title>
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23090a0c'/%3E%3Cpath d='M32 6c14 11 22 24 21 37-.8 12-10 18-21 14-11 4-20-2-21-14C10 30 18 17 32 6Z' fill='%23f3f5f4'/%3E%3Cpath d='M32 11c11 10 17 20 16 31-.6 8-7 12-16 9-9 3-15-1-16-9-1-11 5-21 16-31Z' fill='%23111417'/%3E%3Cpath d='M18 45 46 17' stroke='%23d43f36' stroke-width='7' stroke-linecap='round'/%3E%3Cpath d='M21 48 49 20' stroke='%23d8b46d' stroke-width='2.5' stroke-linecap='round'/%3E%3Cpath d='M17 35 36 16M27 50 50 27' stroke='%23f3f5f4' stroke-width='2' stroke-linecap='round' opacity='.9'/%3E%3C/svg%3E" />
+  <title>shredmaster</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+  <link rel="shortcut icon" href="favicon.svg" type="image/svg+xml" />
+  <meta name="theme-color" content="#090a0c" />
   <style>
     :root{
       --bottom-height:118px;
@@ -93,9 +95,10 @@
       right:0;
       z-index:20;
       display:grid;
-      grid-template-columns:44px minmax(0,1fr) 44px;
+      grid-template-columns:44px minmax(158px,220px) 44px;
       align-items:center;
-      gap:10px;
+      justify-content:center;
+      gap:8px;
       padding:12px max(14px,env(safe-area-inset-left)) 10px;
       background:rgba(7,9,11,.86);
       border-bottom:1px solid var(--line);
@@ -108,13 +111,26 @@
       justify-content:center;
       gap:10px;
       font-weight:900;
-      text-transform:uppercase;
-      letter-spacing:.06em;
+      text-transform:none;
+      letter-spacing:.08em;
       color:#fff;
       border-color:#3a444c;
       background:linear-gradient(180deg,rgba(255,255,255,.08),rgba(255,255,255,.02)),#0c1013;
+      width:100%;
+      min-height:46px;
+      overflow:hidden;
+      padding:0;
     }
-    .brand-word{font-size:15px}
+    .brand-word{
+      display:inline;
+      min-width:0;
+      font-size:16px;
+      font-variant-caps:small-caps;
+      text-transform:none;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
     .logo-svg{
       display:block;
       width:34px;
@@ -158,77 +174,16 @@
     h1,h2,h3,p{margin-top:0}
     h1{
       margin-bottom:8px;
-      font-size:clamp(34px,7vw,72px);
+      font-size:64px;
       line-height:.92;
       text-transform:uppercase;
       letter-spacing:.015em;
+      overflow-wrap:anywhere;
     }
-    h2{font-size:clamp(24px,4vw,38px);line-height:1;margin-bottom:10px}
+    h2{font-size:36px;line-height:1;margin-bottom:10px}
     h3{font-size:17px;text-transform:uppercase;letter-spacing:.08em;color:var(--accent-2)}
     p{line-height:1.55}
 
-    .hero{
-      min-height:270px;
-      display:grid;
-      align-content:stretch;
-      border-radius:6px;
-      border:1px solid var(--line);
-      padding:24px;
-      margin-bottom:18px;
-      box-shadow:var(--shadow);
-      background:
-        linear-gradient(90deg,rgba(212,63,54,.18),transparent 34%,rgba(216,180,109,.1)),
-        repeating-linear-gradient(115deg,rgba(255,255,255,.04) 0,rgba(255,255,255,.04) 1px,transparent 1px,transparent 13px),
-        linear-gradient(135deg,#252b30,#11161a 58%,#090a0c);
-    }
-    .hero-lockup{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:22px;
-      min-height:100%;
-    }
-    .hero-logo{
-      width:104px;
-      height:104px;
-    }
-    .hero h1{margin-bottom:6px}
-    .hero-main{
-      display:flex;
-      align-items:center;
-      gap:20px;
-      min-width:0;
-    }
-    .hero-copy{min-width:0}
-    .hero-stats{
-      display:grid;
-      grid-template-columns:repeat(3,minmax(82px,1fr));
-      gap:10px;
-      min-width:min(100%,330px);
-    }
-    .hero-stat{
-      border:1px solid rgba(255,255,255,.12);
-      border-radius:6px;
-      padding:12px;
-      background:rgba(8,10,12,.62);
-      box-shadow:inset 0 1px 0 rgba(255,255,255,.05);
-    }
-    .hero-stat strong{
-      display:block;
-      color:#fff;
-      font-size:28px;
-      line-height:1;
-      font-weight:950;
-    }
-    .hero-stat span{
-      display:block;
-      margin-top:5px;
-      color:var(--muted);
-      font-size:11px;
-      font-weight:850;
-      text-transform:uppercase;
-      letter-spacing:.08em;
-    }
     .card{
       min-width:0;
       background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(0,0,0,.16)),var(--surface);
@@ -243,9 +198,9 @@
     .lesson-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px}
     .lesson-button{
       display:grid;
-      grid-template-rows:auto 1fr auto;
+      grid-template-rows:1fr auto;
       width:100%;
-      min-height:158px;
+      min-height:126px;
       padding:17px;
       text-align:left;
       text-transform:none;
@@ -256,34 +211,7 @@
         var(--surface-2);
     }
     .lesson-button:hover{border-color:#66747d;background-color:#1c2429}
-    .lesson-top{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}
-    .lesson-id{
-      display:grid;
-      place-items:center;
-      width:34px;
-      height:34px;
-      flex:0 0 auto;
-      border-radius:6px;
-      background:#090d10;
-      border:1px solid rgba(216,180,109,.5);
-      color:#fff;
-      font-weight:900;
-    }
     .lesson-title{font-size:22px;line-height:1.03;font-weight:950;text-transform:uppercase}
-    .status{
-      display:inline-flex;
-      align-items:center;
-      gap:6px;
-      width:max-content;
-      border:1px solid var(--line);
-      border-radius:999px;
-      padding:5px 9px;
-      color:var(--muted);
-      font-size:12px;
-      text-transform:uppercase;
-      letter-spacing:.05em;
-    }
-    .status.done{color:#dff5e4;border-color:rgba(99,179,123,.5);background:rgba(99,179,123,.12)}
 
     .toolbar{
       display:flex;
@@ -568,17 +496,18 @@
       .content-grid{grid-template-columns:minmax(0,1.45fr) minmax(280px,.8fr)}
       .progress-grid{grid-template-columns:1fr 1fr}
     }
+    @media(max-width:900px){
+      h1{font-size:52px}
+      h2{font-size:30px}
+    }
     @media(max-width:560px){
       :root{--bottom-height:160px}
       .metronome-bottom{grid-template-columns:44px 78px 44px 1fr}
       #metroToggle{grid-column:1/-1;width:100%}
-      h1{font-size:42px}
-      .hero{padding:18px;min-height:210px}
-      .hero-lockup{align-items:flex-start;display:grid}
-      .hero-main{align-items:flex-start}
-      .hero-logo{width:68px;height:68px}
-      .hero-stats{grid-template-columns:repeat(3,1fr);min-width:0}
-      .brand-word{font-size:13px}
+      h1{font-size:38px}
+      h2{font-size:24px}
+      .brand{gap:8px}
+      .logo-svg{width:30px;height:30px}
     }
   </style>
 </head>
@@ -593,7 +522,7 @@
         <path class="logo-string" d="M21 48 49 20" fill="none" stroke-width="2.5" stroke-linecap="round"/>
         <path class="logo-wire" d="M17 35 36 16M27 50 50 27" fill="none" stroke-width="2" stroke-linecap="round" opacity=".9"/>
       </svg>
-      <span class="brand-word">Shredmaster</span>
+      <span class="brand-word">shredmaster</span>
     </button>
     <button class="icon" id="nextBtn" aria-label="Next">&gt;</button>
   </header>
@@ -1085,34 +1014,9 @@ function renderHome(){
   currentLessonIndex=null;
   currentPageIndex=0;
   const p=getProgress();
-  const completed=lessons.filter(lesson=>p[lesson.id]?.completed).length;
-  app.innerHTML=`<section class="hero">
-    <div class="hero-lockup">
-      <div class="hero-main">
-        <svg class="logo-svg hero-logo" viewBox="0 0 64 64" aria-hidden="true">
-          <path class="logo-shell" d="M32 6c14 11 22 24 21 37-.8 12-10 18-21 14-11 4-20-2-21-14C10 30 18 17 32 6Z"/>
-          <path class="logo-core" d="M32 11c11 10 17 20 16 31-.6 8-7 12-16 9-9 3-15-1-16-9-1-11 5-21 16-31Z"/>
-          <path class="logo-slash" d="M18 45 46 17" fill="none" stroke-width="7" stroke-linecap="round"/>
-          <path class="logo-string" d="M21 48 49 20" fill="none" stroke-width="2.5" stroke-linecap="round"/>
-          <path class="logo-wire" d="M17 35 36 16M27 50 50 27" fill="none" stroke-width="2" stroke-linecap="round" opacity=".9"/>
-        </svg>
-        <div class="hero-copy">
-          <div class="meta">${completed} of ${lessons.length} lessons completed</div>
-          <h1>Shredmaster</h1>
-          <p class="subtle">Precision practice for scales, grips, voicings, and time.</p>
-        </div>
-      </div>
-      <div class="hero-stats">
-        <div class="hero-stat"><strong>${lessons.length}</strong><span>Lessons</span></div>
-        <div class="hero-stat"><strong>${completed}</strong><span>Done</span></div>
-        <div class="hero-stat"><strong>${bpmInput.value}</strong><span>BPM</span></div>
-      </div>
-    </div>
-  </section>
-  <section class="lesson-grid">${lessons.map((lesson,index)=>{
-    const saved=p[lesson.id]||{},done=saved.completed,best=saved.bestBpm?`Best ${saved.bestBpm} BPM`:`Target ${lesson.targetBpm} BPM`;
+  app.innerHTML=`<section class="lesson-grid">${lessons.map((lesson,index)=>{
+    const saved=p[lesson.id]||{},best=saved.bestBpm?`Best ${saved.bestBpm} BPM`:`Target ${lesson.targetBpm} BPM`;
     return `<button class="lesson-button" onclick="openLesson(${index},0)">
-      <div class="lesson-top"><span class="lesson-id">${lesson.id}</span><span class="status ${done?'done':''}">${done?'Complete':'Open'}</span></div>
       <div class="lesson-title">${html(lesson.title)}</div>
       <div class="meta">${html(lesson.category)} - ${best}</div>
     </button>`;
@@ -1487,21 +1391,21 @@ function renderProgressBlock(saved){
 function renderLesson(){
   const lesson=lessons[currentLessonIndex],page=lesson.pages[currentPageIndex],saved=(getProgress()[lesson.id]||{});
   if(lesson.visualType==="scalar"){
-    app.innerHTML=`<section class="card"><div class="meta">Lesson ${lesson.id} - ${html(lesson.category)}</div><h1>${html(lesson.title)}</h1><p>${html(page.body)}</p></section><div class="content-grid"><div>${renderScalarLesson(page)}</div><div>${renderProgressBlock(saved)}</div></div>`;
+    app.innerHTML=`<section class="card"><div class="meta">${html(lesson.category)}</div><h1>${html(lesson.title)}</h1><p>${html(page.body)}</p></section><div class="content-grid"><div>${renderScalarLesson(page)}</div><div>${renderProgressBlock(saved)}</div></div>`;
     return;
   }
   if(lesson.visualType==="technique"){
-    app.innerHTML=`<section class="card"><div class="meta">Lesson ${lesson.id} - ${html(lesson.category)}</div><h1>${html(lesson.title)}</h1><h2>${html(page.heading)}</h2><p>${html(page.body)}</p></section><div class="content-grid"><div>${renderTechniqueLesson(page)}</div><div>${renderProgressBlock(saved)}</div></div>`;
+    app.innerHTML=`<section class="card"><div class="meta">${html(lesson.category)}</div><h1>${html(lesson.title)}</h1><h2>${html(page.heading)}</h2><p>${html(page.body)}</p></section><div class="content-grid"><div>${renderTechniqueLesson(page)}</div><div>${renderProgressBlock(saved)}</div></div>`;
     return;
   }
   if(lesson.visualType==="mode3nps"){
     currentShapeIndex=page.shapeIndex;
     const shape=modeShapes3Nps[currentShapeIndex];
-    app.innerHTML=`<section class="card toolbar"><div><div class="meta">Lesson ${lesson.id} - ${html(lesson.category)} - Page ${currentPageIndex+1} of ${lesson.pages.length}</div><h1>${html(page.mode)}</h1><div class="pill-row"><span class="pill">Formula: ${html(page.formula)}</span><span class="pill">Character: ${html(page.character)}</span><span class="pill">Sound: ${html(page.sound)}</span></div></div></section>
+    app.innerHTML=`<section class="card toolbar"><div><div class="meta">${html(lesson.category)} - Page ${currentPageIndex+1} of ${lesson.pages.length}</div><h1>${html(page.mode)}</h1><div class="pill-row"><span class="pill">Formula: ${html(page.formula)}</span><span class="pill">Character: ${html(page.character)}</span><span class="pill">Sound: ${html(page.sound)}</span></div></div></section>
     <div class="content-grid"><div><section class="card"><h3>3 Notes Per String</h3><div class="fretboard-controls"><button class="icon" onclick="previousShape()">&lt;</button><strong class="shape-title">Fret ${shape.startFret}</strong><button class="icon" onclick="nextShape()">&gt;</button></div><div class="fretboard-wrap">${renderFretboard(shape,page.root,false)}</div></section><section class="card"><h3>Tab</h3><div class="tab-box"><pre>${html(shape.tab)}</pre></div></section></div><div>${renderProgressBlock(saved)}</div></div>`;
     return;
   }
-  app.innerHTML=`<section class="card"><div class="meta">Lesson ${lesson.id} - ${html(lesson.category)} - Page ${currentPageIndex+1} of ${lesson.pages.length}</div><h1>${html(lesson.title)}</h1><h2>${html(page.heading)}</h2><p>${html(page.body)}</p><div class="pill-row">${page.formula?`<span class="pill">${html(page.formula)}</span>`:""}${page.interval?`<span class="pill">Interval: ${html(page.interval)}</span>`:""}</div></section><div class="content-grid"><div>${renderVisualLesson(page,lesson.visualType)}</div><div>${renderProgressBlock(saved)}</div></div>`;
+  app.innerHTML=`<section class="card"><div class="meta">${html(lesson.category)} - Page ${currentPageIndex+1} of ${lesson.pages.length}</div><h1>${html(lesson.title)}</h1><h2>${html(page.heading)}</h2><p>${html(page.body)}</p><div class="pill-row">${page.formula?`<span class="pill">${html(page.formula)}</span>`:""}${page.interval?`<span class="pill">Interval: ${html(page.interval)}</span>`:""}</div></section><div class="content-grid"><div>${renderVisualLesson(page,lesson.visualType)}</div><div>${renderProgressBlock(saved)}</div></div>`;
 }
 function previousShape(){currentShapeIndex=(currentShapeIndex+modeShapes3Nps.length-1)%modeShapes3Nps.length;lessons[currentLessonIndex].pages[currentPageIndex].shapeIndex=currentShapeIndex;renderLesson()}
 function nextShape(){currentShapeIndex=(currentShapeIndex+1)%modeShapes3Nps.length;lessons[currentLessonIndex].pages[currentPageIndex].shapeIndex=currentShapeIndex;renderLesson()}
